@@ -1,0 +1,11 @@
+test_candidate_for_different_database_is_rejected (test_agent_targets.AgentTargetTests.test_candidate_for_different_database_is_rejected) ... ok
+test_changed_source_makes_registration_stale (test_agent_targets.AgentTargetTests.test_changed_source_makes_registration_stale) ... ok
+test_invented_source_location_is_rejected (test_agent_targets.AgentTargetTests.test_invented_source_location_is_rejected) ... ok
+test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai (test_agent_targets.AgentTargetTests.test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai) ... ok
+test_sealed_agent_candidate_cannot_be_overwritten (test_agent_targets.AgentTargetTests.test_sealed_agent_candidate_cannot_be_overwritten) ... ok
+test_stale_target_request_is_rejected (test_agent_targets.AgentTargetTests.test_stale_target_request_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.639s
+
+OK

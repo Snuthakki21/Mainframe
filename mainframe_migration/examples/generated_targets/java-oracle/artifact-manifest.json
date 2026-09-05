@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "artifact_id": "672103db5e775739ed977144c2c49c31c5e4975eafb89e0bf3f9b6e09c9eddf5",
+  "target": "java-oracle",
+  "files": {
+    "Json.java": "925450f1a04a6fbb2ce1bfd42ea1b163b95ccd59c545c7e62dc8282d082b4c5b",
+    "Main.java": "fb0de8a2f11d89ec1aa421a07fd36068fb5ef561329376732fc8bd40ce909650",
+    "MfDatabase.java": "5ee205d09eb9bd1a96eb67890229ae8b8adbc514ede59a31e553168ecc0600ab",
+    "MfRuntime.java": "29402db26417d4f1bc18dc53f29089894e0e490a9a4f6943011383fbe4680128",
+    "README.md": "fed078abc97fe1d639f93ad0e11720acd8008f985d9c692ec5fe6be279e3942e",
+    "build.cmd": "da1857bb6a340bcbfaff313f47ad1ad49d54869e81136dcdbf0197c253952dc8",
+    "build.sh": "d4e5710bd4eda04b6199870f94654b6929933067b789c81db36e1e3dd2f3ba94",
+    "database/capabilities.json": "e3f078535716f86fdd231b9323de89cfca0754775065e249e8af886d31f9ff7f",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "eee27cb45caf002083ee7dc2b2a0819b40df08368da29a817d378c53e323e5d8",
+    "dependencies.json": "07252ecaa044bac36ddd9a1e111d845de1f85a5b881601eb46d3d0c12944c620",
+    "jobs/JOB001.java": "047e5a881ec5561fac4c222499d23e3450ea127371dfb68c7826f941f63baa89",
+    "jobs/JOB002.java": "7fa60961e77e93d433a065e6525bd3b409eb54490582e12b9c3635535ea247c6",
+    "jobs/JOB003.java": "3711109bd899a9b603953f265fc494c1e5789e49b3709025ab540f811d3f71d2",
+    "jobs/JOB004.java": "860564afeac677310c68ac901081b73ed81870711048d54281caa10e8ae05319",
+    "jobs/JOB005.java": "efb9f6f711a0cae66a4cb3107533bae70609007c8a7f1b78a1c851f447528cdf",
+    "package.json": "83a1975e60bf1ac8dbfaf419cc4b2adb3aac9e9162f3397c66818aebe7e1cd95",
+    "target.json": "f1c1ee6edd7a4e3450ab05091fb5c282877514b471b7e6cc3fa368dd2bc3b612"
+  }
+}

@@ -1,0 +1,9 @@
+test_missing_dotnet_sdk_cannot_report_compiled_or_validated (test_verification.VerificationTests.test_missing_dotnet_sdk_cannot_report_compiled_or_validated) ... ok
+test_no_baseline_still_compiles_but_does_not_validate (test_verification.VerificationTests.test_no_baseline_still_compiles_but_does_not_validate) ... ok
+test_oracle_is_explicit_contract_not_a_live_database_pass (test_verification.VerificationTests.test_oracle_is_explicit_contract_not_a_live_database_pass) ... ok
+test_python_sqlite_executes_real_sqlite_and_matches_all_scenarios (test_verification.VerificationTests.test_python_sqlite_executes_real_sqlite_and_matches_all_scenarios) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 25.085s
+
+OK

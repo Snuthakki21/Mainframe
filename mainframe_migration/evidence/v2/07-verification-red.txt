@@ -1,0 +1,21 @@
+test_verification (unittest.loader._FailedTest.test_verification) ... ERROR
+
+======================================================================
+ERROR: test_verification (unittest.loader._FailedTest.test_verification)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_verification
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.13/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_verification.py", line 5, in <module>
+    from migration.targets.verify import verify_target
+ModuleNotFoundError: No module named 'migration.targets.verify'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

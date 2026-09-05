@@ -1,0 +1,25 @@
+{
+  "ACCOUNT_LEDGER": {
+    "columns": [
+      "SEQ",
+      "ACCOUNT_ID",
+      "AMOUNT_CENTS",
+      "BUSINESS_DATE",
+      "CATEGORY",
+      "FEE_CENTS"
+    ],
+    "order_by": [
+      "SEQ"
+    ],
+    "rows": [
+      [
+        0,
+        "999999",
+        1,
+        20260901,
+        "Z",
+        0
+      ]
+    ]
+  }
+}

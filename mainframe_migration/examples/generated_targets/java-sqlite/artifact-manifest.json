@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "artifact_id": "b995a0e2537485fec67571567b4e7b007a552dd8cc78b759ce83691fd3f35fb4",
+  "target": "java-sqlite",
+  "files": {
+    "Json.java": "925450f1a04a6fbb2ce1bfd42ea1b163b95ccd59c545c7e62dc8282d082b4c5b",
+    "Main.java": "fb0de8a2f11d89ec1aa421a07fd36068fb5ef561329376732fc8bd40ce909650",
+    "MfDatabase.java": "a65526f4d7fa9e6c0ecf45f912a3377b90150c71bb86ab7cdb03dfc1718727da",
+    "MfRuntime.java": "29402db26417d4f1bc18dc53f29089894e0e490a9a4f6943011383fbe4680128",
+    "README.md": "1eb3514c17610849e36bc3ac8add4b17be9e0a3f198a3ebe379868211e0dfcc8",
+    "build.cmd": "da1857bb6a340bcbfaff313f47ad1ad49d54869e81136dcdbf0197c253952dc8",
+    "build.sh": "d4e5710bd4eda04b6199870f94654b6929933067b789c81db36e1e3dd2f3ba94",
+    "database/capabilities.json": "e3f078535716f86fdd231b9323de89cfca0754775065e249e8af886d31f9ff7f",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "3ca7e672023cd2e46652e4e2dfcadeae394cee162697feeccaf68c85a4e94c8e",
+    "dependencies.json": "b68462e6c3dd11fa7bd3e255972f07520a3a9152ef5df8fd7a8917cfcb2de4d1",
+    "jobs/JOB001.java": "047e5a881ec5561fac4c222499d23e3450ea127371dfb68c7826f941f63baa89",
+    "jobs/JOB002.java": "7fa60961e77e93d433a065e6525bd3b409eb54490582e12b9c3635535ea247c6",
+    "jobs/JOB003.java": "3711109bd899a9b603953f265fc494c1e5789e49b3709025ab540f811d3f71d2",
+    "jobs/JOB004.java": "860564afeac677310c68ac901081b73ed81870711048d54281caa10e8ae05319",
+    "jobs/JOB005.java": "efb9f6f711a0cae66a4cb3107533bae70609007c8a7f1b78a1c851f447528cdf",
+    "package.json": "34090f51bd75adeffd0e7504b226fe42064c05d6a39e78a887b35811cbd657d2",
+    "target.json": "b8657a225397bcabced71e84fcd9eb3acb66b6b9ae5089a62dc952bc18208b6d"
+  }
+}

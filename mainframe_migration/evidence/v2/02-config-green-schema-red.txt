@@ -1,0 +1,29 @@
+test_portable_model (unittest.loader._FailedTest.test_portable_model) ... ERROR
+test_connection_secrets_are_not_inline (test_target_config.ConfigurationTests.test_connection_secrets_are_not_inline) ... ok
+test_dotnet_alias_is_canonical (test_target_config.ConfigurationTests.test_dotnet_alias_is_canonical) ... ok
+test_duplicate_keys_rejected (test_target_config.ConfigurationTests.test_duplicate_keys_rejected) ... ok
+test_framework_version_is_validated (test_target_config.ConfigurationTests.test_framework_version_is_validated) ... ok
+test_gcp_is_not_a_database (test_target_config.ConfigurationTests.test_gcp_is_not_a_database) ... ok
+test_python_sqlite_default (test_target_config.ConfigurationTests.test_python_sqlite_default) ... ok
+test_unknown_key_never_ignored (test_target_config.ConfigurationTests.test_unknown_key_never_ignored) ... ok
+test_unknown_language_never_falls_back (test_target_config.ConfigurationTests.test_unknown_language_never_falls_back) ... ok
+
+======================================================================
+ERROR: test_portable_model (unittest.loader._FailedTest.test_portable_model)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_portable_model
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.13/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_portable_model.py", line 3, in <module>
+    from migration.targets.schema import parse_schema, ddl, capabilities
+ModuleNotFoundError: No module named 'migration.targets.schema'
+
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.004s
+
+FAILED (errors=1)

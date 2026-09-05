@@ -1,0 +1,24 @@
+test_csharp_has_native_methods (test_generation.GenerationTests.test_csharp_has_native_methods) ... ok
+test_java_has_native_methods_and_not_python_execution (test_generation.GenerationTests.test_java_has_native_methods_and_not_python_execution) ... ok
+test_multistep_job_retained_for_all_languages (test_generation.GenerationTests.test_multistep_job_retained_for_all_languages) ... ok
+test_no_unfinished_implementation_marker (test_generation.GenerationTests.test_no_unfinished_implementation_marker) ... ok
+test_python_source_condition_is_emitted (test_generation.GenerationTests.test_python_source_condition_is_emitted) ... ok
+test_bigquery_decimal_and_constraints_are_not_silently_weakened (test_portable_model.SchemaTests.test_bigquery_decimal_and_constraints_are_not_silently_weakened) ... ok
+test_integer_range_preserved (test_portable_model.SchemaTests.test_integer_range_preserved) ... ok
+test_oracle_ddl_preserves_precision_and_key (test_portable_model.SchemaTests.test_oracle_ddl_preserves_precision_and_key) ... ok
+test_source_width_and_type_are_preserved (test_portable_model.SchemaTests.test_source_width_and_type_are_preserved) ... ok
+test_sqlite_decimal_is_not_float (test_portable_model.SchemaTests.test_sqlite_decimal_is_not_float) ... ok
+test_unknown_constraint_not_discarded (test_portable_model.SchemaTests.test_unknown_constraint_not_discarded) ... ok
+test_connection_secrets_are_not_inline (test_target_config.ConfigurationTests.test_connection_secrets_are_not_inline) ... ok
+test_dotnet_alias_is_canonical (test_target_config.ConfigurationTests.test_dotnet_alias_is_canonical) ... ok
+test_duplicate_keys_rejected (test_target_config.ConfigurationTests.test_duplicate_keys_rejected) ... ok
+test_framework_version_is_validated (test_target_config.ConfigurationTests.test_framework_version_is_validated) ... ok
+test_gcp_is_not_a_database (test_target_config.ConfigurationTests.test_gcp_is_not_a_database) ... ok
+test_python_sqlite_default (test_target_config.ConfigurationTests.test_python_sqlite_default) ... ok
+test_unknown_key_never_ignored (test_target_config.ConfigurationTests.test_unknown_key_never_ignored) ... ok
+test_unknown_language_never_falls_back (test_target_config.ConfigurationTests.test_unknown_language_never_falls_back) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.034s
+
+OK

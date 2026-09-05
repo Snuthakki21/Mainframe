@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "manager": "maven",
+      "name": "org.xerial:sqlite-jdbc",
+      "version": "3.50.3.0"
+    }
+  ],
+  "source_policy": "Resolve through the approved Artifactory feed. No restore/download is performed by generation.",
+  "transitive_lock_status": "NOT_RESOLVED_HERE; capture dependency lock/hashes using the approved feed before deployment."
+}

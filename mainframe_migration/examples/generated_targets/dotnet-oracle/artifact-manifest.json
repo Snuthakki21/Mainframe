@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "artifact_id": "92b5230a5fe8c5ba987abbdfda446178ca98c08c910bf69ad5886c9d9b410cdf",
+  "target": "dotnet-oracle",
+  "files": {
+    "Dec.cs": "7441be159ba61a1bffaa8cc29983066f8906f5c3960e35ae94761f54cdcd277b",
+    "Json.cs": "64aad52679c9402cbd4f7a2d3f169707bc3a79b0e8526d35dd21306db6dc6785",
+    "Main.cs": "c5624f4c375bab03bf38840a36ff9260570a00ef8d29ca098962b89ca907376e",
+    "MfDatabase.cs": "0e5639b1cca098624a99745471d91f077b6819c06ba4e9ee475705cb1ab9b643",
+    "MfRuntime.cs": "1716b60a1336af2e1d003ea0dfe7595f72467776251c88923afabef643ab5436",
+    "MigratedProcess.csproj": "898ec2db3e9d8f42901178e4ebef8304828f8769ad5234d66de16a68b341c695",
+    "NuGet.Config": "2142cfb2dfa2c7feefbe40fabcc68b0dfecadafa99a1db9b70239d977cf2a7ef",
+    "README.md": "3fef5127beaced963cdc92651b50e2d2364875cdd588c2f543ccd3847269b371",
+    "database/capabilities.json": "e3f078535716f86fdd231b9323de89cfca0754775065e249e8af886d31f9ff7f",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "eee27cb45caf002083ee7dc2b2a0819b40df08368da29a817d378c53e323e5d8",
+    "dependencies.json": "04a03d857222636bd4dece206232492e93a9f68bd6ff92e30135da84e7a8cea7",
+    "jobs/JOB001.cs": "261d04345f00163bdf61cbef6ef73b80a4ccf28cb8b64f7df47361bfe582e910",
+    "jobs/JOB002.cs": "6537e85ff97b1c5e3d5148e8981d04cdba92840d68024a98a200ca05963f9035",
+    "jobs/JOB003.cs": "c99dd8bd0726f105a582b49fe9cbc5e261a03833b0ed86d31c6bef4b5a4990f9",
+    "jobs/JOB004.cs": "a5f36e239d3ac4d1bf698481d0b1251e3a6419ad8e7f4ad682e6346a5e7e0443",
+    "jobs/JOB005.cs": "56c70ec5656ba70f76abbae78618c1304ee91e8fedbdd1d7977065ea7afd793b",
+    "package.json": "4567b8ff2edf405d36930fd3e1c046023b37d2614bf3643df840f61592d7a726",
+    "target.json": "0906bb007b4e0d43ea415c6a54895d3a7da443c1c72ab33fb15db14f264f566c"
+  }
+}

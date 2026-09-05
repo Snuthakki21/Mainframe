@@ -1,0 +1,13 @@
+test_baseline_tamper_blocks_even_when_target_changed (test_controller.ControllerTests.test_baseline_tamper_blocks_even_when_target_changed) ... ok
+test_bigquery_pk_blocker_prevents_validated_status (test_controller.ControllerTests.test_bigquery_pk_blocker_prevents_validated_status) ... ok
+test_changed_source_invalidates_only_affected_job_model (test_controller.ControllerTests.test_changed_source_invalidates_only_affected_job_model) ... ok
+test_conflicting_process_target_is_rejected (test_controller.ControllerTests.test_conflicting_process_target_is_rejected) ... ok
+test_corrupted_prior_artifact_is_blocked_without_repair (test_controller.ControllerTests.test_corrupted_prior_artifact_is_blocked_without_repair) ... ok
+test_legacy_delivery_is_recorded_without_inheriting_validation (test_controller.ControllerTests.test_legacy_delivery_is_recorded_without_inheriting_validation) ... ok
+test_registry_tamper_blocks_instead_of_resetting_history (test_controller.ControllerTests.test_registry_tamper_blocks_instead_of_resetting_history) ... ok
+test_retarget_switch_and_switch_back_reuses_correct_layers (test_controller.ControllerTests.test_retarget_switch_and_switch_back_reuses_correct_layers) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.802s
+
+OK

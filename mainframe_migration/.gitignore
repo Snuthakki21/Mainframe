@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+.migration/
+output/
+agent_artifacts/
+candidates/
+evidence/windows/
+evidence/package-check/
+**/build/
+**/bin/
+**/obj/

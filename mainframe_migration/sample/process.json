@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "process": "synthetic_accounts",
+  "repository": "repository",
+  "inventory": "inventory.xlsx",
+  "sheet": "Process",
+  "source_format": "free",
+  "collation": "cp037",
+  "execution_order": [
+    "JOB001",
+    "JOB002",
+    "JOB003",
+    "JOB004",
+    "JOB005"
+  ],
+  "order_evidence": "Synthetic process specification; not an AutoSys export.",
+  "ddl_sources": [
+    "ddl/ledger.sql"
+  ],
+  "knowledge": "../knowledge/answers.json",
+  "output": "../output",
+  "cache": "../.migration/cache",
+  "agent_artifacts": "../agent_artifacts",
+  "timeout_seconds": 30,
+  "max_sort_records": 100000,
+  "baseline": {
+    "kind": "synthetic",
+    "description": "Independent integer-cent specification; not mainframe execution.",
+    "manifest": "baseline_manifest.json"
+  },
+  "datasets": {
+    "SAMPLE.RAW": {
+      "role": "input",
+      "path": "inputs/raw.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.BDATE": {
+      "role": "input",
+      "path": "inputs/date.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 8
+    },
+    "SAMPLE.ACCEPT": {
+      "role": "intermediate",
+      "path": "files/accept.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.REJECT": {
+      "role": "output",
+      "path": "files/reject.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.SORTED": {
+      "role": "intermediate",
+      "path": "files/sorted.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.FEES": {
+      "role": "output",
+      "path": "files/fees.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 29
+    },
+    "SAMPLE.AUDIT": {
+      "role": "output",
+      "path": "files/audit.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 29
+    },
+    "SAMPLE.TOTAL": {
+      "role": "output",
+      "path": "files/total.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 28
+    }
+  },
+  "cases": [
+    {
+      "name": "normal",
+      "path": "cases/normal",
+      "initial_database": "initial.sql",
+      "expected_files": {
+        "SAMPLE.ACCEPT": "expected/accept.bin",
+        "SAMPLE.REJECT": "expected/reject.bin",
+        "SAMPLE.SORTED": "expected/sorted.bin",
+        "SAMPLE.FEES": "expected/fees.bin",
+        "SAMPLE.AUDIT": "expected/audit.bin",
+        "SAMPLE.TOTAL": "expected/total.bin"
+      },
+      "expected_database": "expected/database.json",
+      "return_codes": {
+        "JOB001": 0,
+        "JOB002": 0,
+        "JOB003": 0,
+        "JOB004": 0,
+        "JOB005": 0
+      }
+    },
+    {
+      "name": "boundaries",
+      "path": "cases/boundaries",
+      "initial_database": "initial.sql",
+      "expected_files": {
+        "SAMPLE.ACCEPT": "expected/accept.bin",
+        "SAMPLE.REJECT": "expected/reject.bin",
+        "SAMPLE.SORTED": "expected/sorted.bin",
+        "SAMPLE.FEES": "expected/fees.bin",
+        "SAMPLE.AUDIT": "expected/audit.bin",
+        "SAMPLE.TOTAL": "expected/total.bin"
+      },
+      "expected_database": "expected/database.json",
+      "return_codes": {
+        "JOB001": 0,
+        "JOB002": 0,
+        "JOB003": 0,
+        "JOB004": 0,
+        "JOB005": 0
+      }
+    },
+    {
+      "name": "empty",
+      "path": "cases/empty",
+      "initial_database": "initial.sql",
+      "expected_files": {
+        "SAMPLE.ACCEPT": "expected/accept.bin",
+        "SAMPLE.REJECT": "expected/reject.bin",
+        "SAMPLE.SORTED": "expected/sorted.bin",
+        "SAMPLE.FEES": "expected/fees.bin",
+        "SAMPLE.AUDIT": "expected/audit.bin",
+        "SAMPLE.TOTAL": "expected/total.bin"
+      },
+      "expected_database": "expected/database.json",
+      "return_codes": {
+        "JOB001": 0,
+        "JOB002": 0,
+        "JOB003": 0,
+        "JOB004": 0,
+        "JOB005": 0
+      }
+    }
+  ],
+  "generation_mode": "offline_subset"
+}

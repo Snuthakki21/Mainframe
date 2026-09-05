@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "manager": "nuget",
+      "name": "Oracle.ManagedDataAccess.Core",
+      "version": "23.26.300"
+    }
+  ],
+  "source_policy": "Resolve through the approved Artifactory feed. No restore/download is performed by generation.",
+  "transitive_lock_status": "NOT_RESOLVED_HERE; capture dependency lock/hashes using the approved feed before deployment."
+}

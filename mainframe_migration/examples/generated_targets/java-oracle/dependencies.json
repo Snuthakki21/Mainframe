@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    {
+      "manager": "maven",
+      "name": "com.oracle.database.jdbc:ojdbc11",
+      "version": "23.9.0.25.07"
+    }
+  ],
+  "source_policy": "Resolve through the approved Artifactory feed. No restore/download is performed by generation.",
+  "transitive_lock_status": "NOT_RESOLVED_HERE; capture dependency lock/hashes using the approved feed before deployment."
+}

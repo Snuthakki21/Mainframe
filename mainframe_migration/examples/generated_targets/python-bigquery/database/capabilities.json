@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED",
+  "items": [
+    {
+      "code": "PRIMARY_KEY_NOT_ENFORCED",
+      "table": "ACCOUNT_LEDGER",
+      "question": "ACCOUNT_LEDGER requires enforced primary-key uniqueness. BigQuery does not enforce keys. A reviewed enforcement architecture is required; the framework will not drop this requirement."
+    }
+  ]
+}

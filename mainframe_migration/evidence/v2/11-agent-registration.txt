@@ -1,0 +1,155 @@
+test_candidate_for_different_database_is_rejected (test_agent_targets.AgentTargetTests.test_candidate_for_different_database_is_rejected) ... ERROR
+test_changed_source_makes_registration_stale (test_agent_targets.AgentTargetTests.test_changed_source_makes_registration_stale) ... ERROR
+test_invented_source_location_is_rejected (test_agent_targets.AgentTargetTests.test_invented_source_location_is_rejected) ... ERROR
+test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai (test_agent_targets.AgentTargetTests.test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai) ... ERROR
+test_sealed_agent_candidate_cannot_be_overwritten (test_agent_targets.AgentTargetTests.test_sealed_agent_candidate_cannot_be_overwritten) ... ERROR
+test_stale_target_request_is_rejected (test_agent_targets.AgentTargetTests.test_stale_target_request_is_rejected) ... ERROR
+
+======================================================================
+ERROR: test_candidate_for_different_database_is_rejected (test_agent_targets.AgentTargetTests.test_candidate_for_different_database_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 42, in test_candidate_for_different_database_is_rejected
+    req,cand,review=self.candidate();p=cand/'target.json';t=read_json(p);t['database']='oracle';write_json(p,t)
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmp_q94m6hz/output/synthetic_accounts/runs/20260905T144748.472518Z-82c71a/agent_request.json'
+
+======================================================================
+ERROR: test_changed_source_makes_registration_stale (test_agent_targets.AgentTargetTests.test_changed_source_makes_registration_stale)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 45, in test_changed_source_makes_registration_stale
+    req,cand,review=self.candidate();p=self.root/'sample/repository/cobol/CLASSIFY.cbl';p.write_text(p.read_text()+'\n*> changed source\n')
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmptuwxgan8/output/synthetic_accounts/runs/20260905T144748.507516Z-766a31/agent_request.json'
+
+======================================================================
+ERROR: test_invented_source_location_is_rejected (test_agent_targets.AgentTargetTests.test_invented_source_location_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 55, in test_invented_source_location_is_rejected
+    req,cand,review=self.candidate();r=read_json(review);r['jobs']['JOB001']['trace'][0]['source_line']=999999;write_json(review,r)
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpaxp4vqs6/output/synthetic_accounts/runs/20260905T144748.558265Z-e09693/agent_request.json'
+
+======================================================================
+ERROR: test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai (test_agent_targets.AgentTargetTests.test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 37, in test_registered_candidate_is_consumed_without_repair_or_claiming_live_ai
+    req,cand,review=self.candidate();register(req,cand,review)
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpnyyzxzq5/output/synthetic_accounts/runs/20260905T144748.611032Z-7eb983/agent_request.json'
+
+======================================================================
+ERROR: test_sealed_agent_candidate_cannot_be_overwritten (test_agent_targets.AgentTargetTests.test_sealed_agent_candidate_cannot_be_overwritten)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 48, in test_sealed_agent_candidate_cannot_be_overwritten
+    req,cand,review=self.candidate();register(req,cand,review)
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpl53l6nvd/output/synthetic_accounts/runs/20260905T144748.666554Z-bc9eda/agent_request.json'
+
+======================================================================
+ERROR: test_stale_target_request_is_rejected (test_agent_targets.AgentTargetTests.test_stale_target_request_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 52, in test_stale_target_request_is_rejected
+    req,cand,review=self.candidate();p=self.root/'target.json';t=read_json(p);t['language']='java';write_json(p,t)
+                    ~~~~~~~~~~~~~~^^
+  File "/mnt/data/retarget_build/mainframe_migration/tests_target/test_agent_targets.py", line 24, in candidate
+    request_path=Path(result['run_folder'])/'agent_request.json';request=read_json(request_path)
+                                                                         ~~~~~~~~~^^^^^^^^^^^^^^
+  File "/mnt/data/retarget_build/mainframe_migration/migration/common.py", line 37, in read_json
+    return json.loads(path.read_text(encoding='utf-8-sig'))
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 548, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/pathlib/_local.py", line 539, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpdjghcvwc/output/synthetic_accounts/runs/20260905T144748.689844Z-8db21b/agent_request.json'
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.280s
+
+FAILED (errors=6)

@@ -1,0 +1,61 @@
+TARGET MATRIX: python sqlite
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: python oracle
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: python bigquery
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: java sqlite
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: java oracle
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: java bigquery
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: dotnet sqlite
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: dotnet oracle
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+TARGET MATRIX: dotnet bigquery
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+[DISCOVER] Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.
+[MODEL] Loading or creating sealed source behavior models. Database selection is not part of their identity.
+[GENERATE] Assembling native job files, selected database adapter, target DDL, dependency declarations, and source lineage.
+[VERIFY] Compiling available runtimes and executing appropriate local checks. Remote databases are not contacted.
+[REPORT] Saved target history, exact artifact fingerprints, validation results, and remaining capability gaps.
+STATUS: CHECKS_PASSED_WITH_EXPLICIT_RUNTIME_GAPS
+MATRIX_EXIT=0

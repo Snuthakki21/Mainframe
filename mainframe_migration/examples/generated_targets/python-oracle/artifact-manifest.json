@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "artifact_id": "aa2d7556682a8c4134465ad1e457221a1c4487af175a5d975581974c1392b80c",
+  "target": "python-oracle",
+  "files": {
+    "README.md": "9fb61842dc7b0f11cd7910866687876268ea402cb8c570bc691f678ae9844950",
+    "_common.py": "f53b18853fec5f62ccfd97c24d272f4c8fe5bf1514266ca586c8e2c6bc7ab5c4",
+    "_database.py": "09d5ef10179d0a86443a6c7840fb0abcf5624c685183201893928f6ed22849e2",
+    "_entry.py": "56f9d8ddb241701cca4ab768ab8e78fae6b69c87991c47e5ae8e4bd2762e50d9",
+    "_runtime.py": "e55df7356bdb40e99239894183974bbd48b249922b6404290baf6cd3ce6518dd",
+    "database/capabilities.json": "e3f078535716f86fdd231b9323de89cfca0754775065e249e8af886d31f9ff7f",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "eee27cb45caf002083ee7dc2b2a0819b40df08368da29a817d378c53e323e5d8",
+    "dependencies.json": "d40dde597d7f5529475ffea6c51e14d5aa3a597dc24bf912a1ace95079ea5683",
+    "jobs/JOB001.py": "11b8f31ee7788a42b1e44ca33baa1f5289fd4e99ac0f7279660f161dd6e416c5",
+    "jobs/JOB002.py": "3e9c89d58451ebd1793a32d4afc799835622e74bd86805d860ce9898c465326b",
+    "jobs/JOB003.py": "ce16e79b97dcc89b9d6ea269959275defbb29a39964d7854781efca7f2f35c79",
+    "jobs/JOB004.py": "e27a863e8995184471b50424d202d6ad091060fea17a3af5ff032654e73ae05c",
+    "jobs/JOB005.py": "0d32c0e86e1e12954eaabe76a5a0809e9c2a4f835b31d4520bb715122a8c52fe",
+    "package.json": "7eb7fa2fb348e0e271b55c4f6e736e48638492595a13c6d8beef61ed58d2964b",
+    "target.json": "5c9f3e45c61949742e1dc98277772d8be0d2f3d0acba53b538298addef445d2f"
+  }
+}

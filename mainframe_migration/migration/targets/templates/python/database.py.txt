@@ -1,0 +1,140 @@
+"""Selected database adapter. Business functions never contain database-specific SQL.
+
+Exact numbers are validated before binding. Source COMMIT and ROLLBACK remain
+explicit. A contract recording is labeled as such and is never a live DB test.
+"""
+from decimal import Decimal, localcontext
+from pathlib import Path
+import json, os, re, time, uuid
+from urllib.request import Request,urlopen
+from urllib.parse import quote
+
+TARGET_DATABASE = '@@DATABASE@@'
+
+def identifier(name):
+    """Protect SQL object names, which cannot be supplied through value parameters."""
+    if not re.fullmatch(r'[A-Z][A-Z0-9_]{0,127}',name):raise ValueError('Unsupported SQL identifier: '+str(name))
+    return ('`'+name+'`') if TARGET_DATABASE=='bigquery' else ('"'+name+'"')
+
+def exact(col,value):
+    """Reject lossy coercion instead of accepting a database's default rounding."""
+    if value is None:
+        if not col['nullable']:raise ValueError('NULL violates the source schema.')
+        return None
+    if col['kind']=='text':
+        if not isinstance(value,str) or len(value)>col['length']:raise ValueError('Text violates the source width/type.')
+        if TARGET_DATABASE=='oracle' and value=='':raise ValueError('Oracle empty-string semantics need an explicit mapping.')
+        return value.ljust(col['length']) if col['source_type']=='CHAR' else value
+    if isinstance(value,(float,bool)):raise TypeError('Exact source numbers cannot use a binary float or boolean.')
+    with localcontext() as dc:
+        dc.prec=80;n=Decimal(value)
+        if not n.is_finite():raise ValueError('Non-finite number.')
+        if col['kind']=='integer':
+            if n!=n.to_integral_value() or not Decimal(col['minimum'])<=n<=Decimal(col['maximum']):raise ValueError('Integer violates source bounds.')
+            return int(n)
+        s,p=col['scale'],col['precision']
+        if n!=n.quantize(Decimal(1).scaleb(-s)) or abs(n)>=Decimal(10)**(p-s):raise ValueError('Decimal violates source precision/scale.')
+        return format(n,f'.{s}f')
+
+class Database:
+    """Implement INSERT, COMMIT, and ROLLBACK for the selected database only."""
+    def __init__(self,payload):
+        self.payload=payload;self.schema=payload['schema'];self.conn=None
+        self.pending=False;self.operations=[];self.session=None;self.uncertain=False
+        self.contract=payload.get('execution_mode')=='contract'
+        if payload.get('database')!=TARGET_DATABASE:raise ValueError('Context database differs from the generated target.')
+        if not self.contract and payload.get('capability_blockers'):raise ValueError('Target capability blockers must be resolved before execution.')
+        if not self.contract and TARGET_DATABASE!='sqlite' and not payload.get('allow_remote',False):raise ValueError('Remote execution is not enabled for this run.')
+    def _env(self,key):
+        """Resolve an environment variable name without putting credentials in artifacts."""
+        names=self.payload['connections'][TARGET_DATABASE]
+        value=os.environ.get(names[key],'')
+        if not value:raise ValueError('Required environment variable is missing: '+names[key])
+        return value
+    def _connect(self):
+        """Open a local or vendor connection lazily; file-only jobs need no DB connection."""
+        if self.conn is not None:return
+        if TARGET_DATABASE=='sqlite':
+            import sqlite3
+            self.conn=sqlite3.connect(str(Path(self.payload['work_root'])/'local.sqlite'))
+            self.conn.execute('PRAGMA foreign_keys=ON')
+        elif TARGET_DATABASE=='oracle':
+            import oracledb
+            self.conn=oracledb.connect(user=self._env('user_env'),password=self._env('password_env'),dsn=self._env('dsn_env'))
+            self.conn.autocommit=False
+    def _wire(self,method,url,body=None):
+        """Issue one authenticated REST request with no automatic DML retry."""
+        request=Request(url,data=None if body is None else json.dumps(body).encode(),method=method,
+            headers={'Authorization':'Bearer '+self._env('token_env'),'Content-Type':'application/json'})
+        with urlopen(request,timeout=30) as response:return json.load(response)
+    def _query(self,sql,params=(),create=False):
+        """Run a BigQuery job in an explicit session; retain job IDs for ambiguous failures."""
+        project,dataset,location=self._env('project_env'),self._env('dataset_env'),self._env('location_env')
+        if not re.fullmatch(r'[A-Za-z0-9_-]+',project) or not re.fullmatch(r'[A-Za-z0-9_]+',dataset) or not re.fullmatch(r'[A-Za-z0-9_-]+',location):raise ValueError('Invalid BigQuery project/dataset/location.')
+        jid='migration_'+uuid.uuid4().hex
+        base='https://bigquery.googleapis.com/bigquery/v2/projects/'+quote(project,safe='')+'/jobs'
+        query={'query':sql,'useLegacySql':False,'defaultDataset':{'projectId':project,'datasetId':dataset}}
+        if params:query.update(parameterMode='NAMED',queryParameters=list(params))
+        if create:query['createSession']=True
+        elif self.session:query['connectionProperties']=[{'key':'session_id','value':self.session}]
+        body={'jobReference':{'projectId':project,'jobId':jid,'location':location},'configuration':{'query':query,'jobTimeoutMs':'60000'}}
+        journal=Path(self.payload['work_root'])/'remote_job_ids.jsonl'
+        with journal.open('a',encoding='utf-8') as f:f.write(json.dumps({'database':'bigquery','job_id':jid,'session_id':self.session,'operation':sql.split()[0]})+'\n')
+        try:
+            result=self._wire('POST',base,body);deadline=time.monotonic()+60
+            if create:self.session=result.get('statistics',{}).get('sessionInfo',{}).get('sessionId')
+            while result.get('status',{}).get('state')!='DONE':
+                if time.monotonic()>deadline:raise TimeoutError('Remote outcome unknown; inspect the recorded job ID. No retry is made.')
+                time.sleep(.25);result=self._wire('GET',base+'/'+quote(jid,safe='')+'?location='+quote(location,safe=''))
+            if create:self.session=result.get('statistics',{}).get('sessionInfo',{}).get('sessionId',self.session)
+        except Exception:
+            self.uncertain=True;raise
+        if result.get('status',{}).get('errorResult'):raise RuntimeError('BigQuery rejected the recorded job: '+str(result['status']['errorResult'].get('reason','unknown')))
+        if create and not self.session:raise RuntimeError('BigQuery did not return the created session ID.')
+        return result
+    def insert(self,table,columns,values):
+        """Validate all values and preserve the specified column order and transaction."""
+        if len(columns)!=len(values) or len(set(columns))!=len(columns):raise ValueError('Invalid INSERT column/value mapping.')
+        spec=self.schema[table]['columns'];bound=[exact(spec[c],v) for c,v in zip(columns,values)]
+        event={'op':'insert','table':table,'columns':columns,'values':bound};self.operations.append(event)
+        if self.contract:self.pending=True;return
+        sql='INSERT INTO '+identifier(table)+' ('+','.join(identifier(c) for c in columns)+') VALUES ('
+        if TARGET_DATABASE=='bigquery':
+            if not self.pending:self._query('BEGIN TRANSACTION;',create=not bool(self.session))
+            self.pending=True;params=[]
+            for i,(c,v) in enumerate(zip(columns,bound)):
+                col=spec[c];typ='INT64' if col['kind']=='integer' else ('STRING' if col['kind']=='text' else ('NUMERIC' if col['scale']<=9 and col['precision']-col['scale']<=29 else 'BIGNUMERIC'))
+                params.append({'name':'p'+str(i),'parameterType':{'type':typ},'parameterValue':{} if v is None else {'value':str(v)}})
+            self._query(sql+','.join('@p'+str(i) for i in range(len(columns)))+');',params)
+        else:
+            self._connect();self.pending=True
+            tokens=['?' for _ in columns] if TARGET_DATABASE=='sqlite' else [':p'+str(i) for i in range(len(columns))]
+            sql+=','.join(tokens)+')'
+            if TARGET_DATABASE=='oracle':
+                bound=[Decimal(v) if v is not None and spec[c]['kind']=='decimal' else v for c,v in zip(columns,bound)]
+                with self.conn.cursor() as cur:cur.execute(sql,bound)
+            else:self.conn.execute(sql,bound)
+    def commit(self):
+        """Do not invent a commit at end-of-file or after each record."""
+        self.operations.append({'op':'commit'})
+        if not self.contract:
+            if TARGET_DATABASE=='bigquery' and self.pending:self._query('COMMIT TRANSACTION;')
+            elif self.conn is not None:self.conn.commit()
+        self.pending=False
+    def rollback(self):
+        """Discard the current transaction only when requested or on failed-run cleanup."""
+        self.operations.append({'op':'rollback'})
+        if not self.contract:
+            if TARGET_DATABASE=='bigquery' and self.pending:self._query('ROLLBACK TRANSACTION;')
+            elif self.conn is not None:self.conn.rollback()
+        self.pending=False
+    def finish(self):
+        """An unspecified end-of-step transaction is a blocker, not an implicit commit."""
+        if self.pending:
+            self.rollback();raise ValueError('Source ended with an uncommitted transaction. No automatic commit was added.')
+    def close(self):
+        """Release owned connections without retrying an uncertain remote transaction."""
+        if self.pending and not self.uncertain:self.rollback()
+        if self.conn is not None:self.conn.close()
+        if TARGET_DATABASE=='bigquery' and self.session and not self.contract and not self.uncertain:
+            self._query('CALL BQ.ABORT_SESSION();');self.session=None

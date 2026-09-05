@@ -1,0 +1,18 @@
+// Run one native C# job and record its actual result; never edit a failed candidate.
+using System;
+using System.Collections.Generic;
+using System.IO;
+public static class EntryPoint {
+    public static int Main(string[] args){if(args.Length!=3)throw new ArgumentException("Use JOB context.json result.json");var payload=MfRuntime.obj(Json.Parse(File.ReadAllText(args[1])));var result=new Dictionary<string,object>{{"status","FAILED"},{"return_code",0}};MfRuntime.Context ctx=null;
+        try{ctx=new MfRuntime.Context(payload);switch(args[0]){
+            case "JOB001": JOB001.run(ctx); break;
+            case "JOB002": JOB002.run(ctx); break;
+            case "JOB003": JOB003.run(ctx); break;
+            case "JOB004": JOB004.run(ctx); break;
+            case "JOB005": JOB005.run(ctx); break;
+            default:throw new ArgumentException("Unknown generated job");}result["status"]="PASSED";}
+        catch(Exception e){result["error"]=e.GetType().Name+": "+e.Message;}
+        finally{if(ctx!=null){result["events"]=ctx.events;result["operations"]=ctx.db.operations;try{ctx.Dispose();}catch(Exception e){result["status"]="FAILED";result["error"]="Cleanup failed: "+e.Message;}}File.WriteAllText(args[2],Json.Dump(result)+"\n");}
+        return (string)result["status"]=="PASSED"?0:1;
+    }
+}

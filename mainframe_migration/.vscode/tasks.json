@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Migration: run sample",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "modernize.py",
+        "demo"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Migration: test framework",
+      "type": "process",
+      "command": "python",
+      "args": [
+        "modernize.py",
+        "self-test"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

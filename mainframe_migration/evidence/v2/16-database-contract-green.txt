@@ -1,0 +1,13 @@
+test_ambiguous_remote_outcome_is_not_retried_or_called_successful (test_database_contracts.DatabaseContractTests.test_ambiguous_remote_outcome_is_not_retried_or_called_successful) ... ok
+test_bigquery_session_binding_and_commit_are_explicit (test_database_contracts.DatabaseContractTests.test_bigquery_session_binding_and_commit_are_explicit) ... ok
+test_binary_float_and_overflow_are_rejected (test_database_contracts.DatabaseContractTests.test_binary_float_and_overflow_are_rejected) ... ok
+test_context_database_must_equal_generated_database (test_database_contracts.DatabaseContractTests.test_context_database_must_equal_generated_database) ... ok
+test_high_precision_value_is_not_routed_through_float (test_database_contracts.DatabaseContractTests.test_high_precision_value_is_not_routed_through_float) ... ok
+test_invalid_bigquery_dataset_is_blocked_before_transport (test_database_contracts.DatabaseContractTests.test_invalid_bigquery_dataset_is_blocked_before_transport) ... ok
+test_oracle_binding_does_not_build_values_into_sql (test_database_contracts.DatabaseContractTests.test_oracle_binding_does_not_build_values_into_sql) ... ok
+test_uncommitted_transaction_is_not_repaired_with_commit (test_database_contracts.DatabaseContractTests.test_uncommitted_transaction_is_not_repaired_with_commit) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.028s
+
+OK

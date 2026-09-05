@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "language": "dotnet",
+  "database": "sqlite",
+  "versions": {
+    "java_release": 17,
+    "dotnet_framework": "net10.0"
+  },
+  "validation": {
+    "run_local": true
+  },
+  "connections": {
+    "oracle": {
+      "dsn_env": "MIGRATION_ORACLE_DSN",
+      "user_env": "MIGRATION_ORACLE_USER",
+      "password_env": "MIGRATION_ORACLE_PASSWORD"
+    },
+    "bigquery": {
+      "project_env": "MIGRATION_BQ_PROJECT",
+      "dataset_env": "MIGRATION_BQ_DATASET",
+      "location_env": "MIGRATION_BQ_LOCATION",
+      "token_env": "MIGRATION_BQ_ACCESS_TOKEN"
+    }
+  },
+  "dependencies": {
+    "dotnet_sqlite": "10.0.11",
+    "dotnet_oracle": "23.26.300",
+    "java_sqlite": "3.50.3.0",
+    "java_oracle": "23.9.0.25.07",
+    "python_oracle": "3.2.0"
+  }
+}

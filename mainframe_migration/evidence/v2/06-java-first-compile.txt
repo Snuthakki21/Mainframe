@@ -1,0 +1,9 @@
+JAVAC_EXIT 0
+
+
+JOB001 0  {"status":"PASSED","return_code":0,"events":{"CLASSIFY:CLASSIFY.cbl:25:1":1,"CLASSIFY:CLASSIFY.cbl:26:2":1,"CLASSIFY:CLASSIFY.cbl:28:4":1,"CLASSIFY:CLASSIFY.cbl:30:5":1,"CLASSIFY:C
+JOB002 0  {"status":"PASSED","return_code":0,"events":{},"operations":[]}
+
+JOB003 0  {"status":"PASSED","return_code":0,"events":{"FEEPOST:FEEPOST.cbl:19:1":1,"FEEPOST:FEEPOST.cbl:20:2":1,"FEEPOST:FEEPOST.cbl:21:3":7,"FEEPOST:FEEPOST.cbl:24:5":6,"FEEPOST:FEEPOST.cb
+JOB004 0  {"status":"PASSED","return_code":0,"events":{"LOADDB:LOADDB.cbl:16:1":1,"LOADDB:LOADDB.cbl:17:2":1,"LOADDB:LOADDB.cbl:18:3":7,"LOADDB:LOADDB.cbl:21:5":6,"LOADDB:LOADDB.cbl:22:6":6,
+JOB005 0  {"status":"PASSED","return_code":0,"events":{"TOTALS:TOTALS.cbl:22:1":1,"TOTALS:TOTALS.cbl:23:2":1,"TOTALS:TOTALS.cbl:24:3":7,"TOTALS:TOTALS.cbl:27:5":6,"TOTALS:TOTALS.cbl:28:6":6,

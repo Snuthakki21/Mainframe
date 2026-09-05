@@ -1,0 +1,1917 @@
+{
+  "schema_version": 2,
+  "language": "dotnet",
+  "database": "oracle",
+  "models": [
+    {
+      "model_version": "portable-behavior-2.0",
+      "job": "JOB001",
+      "source": "jcl/JOB001.jcl",
+      "dependencies": [
+        "cobol/CLASSIFY.cbl",
+        "copybooks/ACCOUNT.cpy",
+        "jcl/JOB001.jcl"
+      ],
+      "programs": [
+        {
+          "name": "CLASSIFY",
+          "source": "CLASSIFY.cbl",
+          "layout": [
+            {
+              "name": "IN-RECORD",
+              "root": "IN-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "DATE-RECORD",
+              "root": "DATE-RECORD",
+              "offset": 0,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "GOOD-RECORD",
+              "root": "GOOD-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "BAD-RECORD",
+              "root": "BAD-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "C-RECORD",
+              "root": "C-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "C-ACCOUNT",
+              "root": "C-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "C-AMOUNT",
+              "root": "C-RECORD",
+              "offset": 6,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "C-DATE",
+              "root": "C-RECORD",
+              "offset": 14,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "C-TYPE",
+              "root": "C-RECORD",
+              "offset": 22,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "RUN-DATE",
+              "root": "RUN-DATE",
+              "offset": 0,
+              "length": 8,
+              "kind": "number",
+              "scale": 0,
+              "value": "0"
+            },
+            {
+              "name": "FINISHED",
+              "root": "FINISHED",
+              "offset": 0,
+              "length": 1,
+              "kind": "text",
+              "scale": 0,
+              "value": "N"
+            }
+          ],
+          "files": {
+            "INFILE": {
+              "dd": "RAWIN",
+              "record": "IN-RECORD"
+            },
+            "DATEFILE": {
+              "dd": "BDATE",
+              "record": "DATE-RECORD"
+            },
+            "GOODFILE": {
+              "dd": "ACCEPT",
+              "record": "GOOD-RECORD"
+            },
+            "BADFILE": {
+              "dd": "REJECT",
+              "record": "BAD-RECORD"
+            }
+          },
+          "tree": [
+            {
+              "line": 2,
+              "kind": "open",
+              "files": [
+                [
+                  "INPUT",
+                  "INFILE"
+                ],
+                [
+                  "INPUT",
+                  "DATEFILE"
+                ],
+                [
+                  "OUTPUT",
+                  "GOODFILE"
+                ],
+                [
+                  "OUTPUT",
+                  "BADFILE"
+                ]
+              ],
+              "id": "CLASSIFY:CLASSIFY.cbl:25:1",
+              "origin": "CLASSIFY.cbl:25"
+            },
+            {
+              "line": 3,
+              "kind": "read",
+              "file": "DATEFILE",
+              "end": [
+                {
+                  "line": 4,
+                  "kind": "return",
+                  "source_verb": "STOP",
+                  "id": "CLASSIFY:CLASSIFY.cbl:27:3",
+                  "origin": "CLASSIFY.cbl:27"
+                }
+              ],
+              "record": [
+                {
+                  "line": 5,
+                  "kind": "move",
+                  "value": {
+                    "kind": "field",
+                    "name": "DATE-RECORD"
+                  },
+                  "targets": [
+                    "RUN-DATE"
+                  ],
+                  "id": "CLASSIFY:CLASSIFY.cbl:28:4",
+                  "origin": "CLASSIFY.cbl:28"
+                }
+              ],
+              "id": "CLASSIFY:CLASSIFY.cbl:26:2",
+              "origin": "CLASSIFY.cbl:26"
+            },
+            {
+              "line": 7,
+              "kind": "close",
+              "files": [
+                "DATEFILE"
+              ],
+              "id": "CLASSIFY:CLASSIFY.cbl:30:5",
+              "origin": "CLASSIFY.cbl:30"
+            },
+            {
+              "line": 8,
+              "kind": "perform",
+              "condition": {
+                "kind": "binary",
+                "op": "=",
+                "left": {
+                  "kind": "field",
+                  "name": "FINISHED"
+                },
+                "right": {
+                  "kind": "text",
+                  "value": "Y"
+                }
+              },
+              "body": [
+                {
+                  "line": 9,
+                  "kind": "read",
+                  "file": "INFILE",
+                  "end": [
+                    {
+                      "line": 10,
+                      "kind": "move",
+                      "value": {
+                        "kind": "text",
+                        "value": "Y"
+                      },
+                      "targets": [
+                        "FINISHED"
+                      ],
+                      "id": "CLASSIFY:CLASSIFY.cbl:33:8",
+                      "origin": "CLASSIFY.cbl:33"
+                    }
+                  ],
+                  "record": [
+                    {
+                      "line": 12,
+                      "kind": "move",
+                      "value": {
+                        "kind": "field",
+                        "name": "IN-RECORD"
+                      },
+                      "targets": [
+                        "C-RECORD"
+                      ],
+                      "id": "CLASSIFY:CLASSIFY.cbl:35:9",
+                      "origin": "CLASSIFY.cbl:35"
+                    },
+                    {
+                      "line": 13,
+                      "kind": "if",
+                      "condition": {
+                        "kind": "binary",
+                        "op": "=",
+                        "left": {
+                          "kind": "field",
+                          "name": "C-TYPE"
+                        },
+                        "right": {
+                          "kind": "text",
+                          "value": "X"
+                        }
+                      },
+                      "yes": [
+                        {
+                          "line": 14,
+                          "kind": "write",
+                          "record": "GOOD-RECORD",
+                          "value": {
+                            "kind": "field",
+                            "name": "C-RECORD"
+                          },
+                          "id": "CLASSIFY:CLASSIFY.cbl:39:11",
+                          "origin": "CLASSIFY.cbl:39"
+                        }
+                      ],
+                      "no": [
+                        {
+                          "line": 16,
+                          "kind": "if",
+                          "condition": {
+                            "kind": "binary",
+                            "op": ">=",
+                            "left": {
+                              "kind": "field",
+                              "name": "C-AMOUNT"
+                            },
+                            "right": {
+                              "kind": "number",
+                              "value": "100000"
+                            }
+                          },
+                          "yes": [
+                            {
+                              "line": 17,
+                              "kind": "if",
+                              "condition": {
+                                "kind": "binary",
+                                "op": "<=",
+                                "left": {
+                                  "kind": "field",
+                                  "name": "C-DATE"
+                                },
+                                "right": {
+                                  "kind": "field",
+                                  "name": "RUN-DATE"
+                                }
+                              },
+                              "yes": [
+                                {
+                                  "line": 18,
+                                  "kind": "write",
+                                  "record": "GOOD-RECORD",
+                                  "value": {
+                                    "kind": "field",
+                                    "name": "C-RECORD"
+                                  },
+                                  "id": "CLASSIFY:CLASSIFY.cbl:43:14",
+                                  "origin": "CLASSIFY.cbl:43"
+                                }
+                              ],
+                              "no": [
+                                {
+                                  "line": 20,
+                                  "kind": "write",
+                                  "record": "BAD-RECORD",
+                                  "value": {
+                                    "kind": "field",
+                                    "name": "C-RECORD"
+                                  },
+                                  "id": "CLASSIFY:CLASSIFY.cbl:45:15",
+                                  "origin": "CLASSIFY.cbl:45"
+                                }
+                              ],
+                              "id": "CLASSIFY:CLASSIFY.cbl:42:13",
+                              "origin": "CLASSIFY.cbl:42"
+                            }
+                          ],
+                          "no": [
+                            {
+                              "line": 23,
+                              "kind": "write",
+                              "record": "BAD-RECORD",
+                              "value": {
+                                "kind": "field",
+                                "name": "C-RECORD"
+                              },
+                              "id": "CLASSIFY:CLASSIFY.cbl:48:16",
+                              "origin": "CLASSIFY.cbl:48"
+                            }
+                          ],
+                          "id": "CLASSIFY:CLASSIFY.cbl:41:12",
+                          "origin": "CLASSIFY.cbl:41"
+                        }
+                      ],
+                      "id": "CLASSIFY:CLASSIFY.cbl:38:10",
+                      "origin": "CLASSIFY.cbl:38"
+                    }
+                  ],
+                  "id": "CLASSIFY:CLASSIFY.cbl:32:7",
+                  "origin": "CLASSIFY.cbl:32"
+                }
+              ],
+              "id": "CLASSIFY:CLASSIFY.cbl:31:6",
+              "origin": "CLASSIFY.cbl:31"
+            },
+            {
+              "line": 28,
+              "kind": "close",
+              "files": [
+                "INFILE",
+                "GOODFILE",
+                "BADFILE"
+              ],
+              "id": "CLASSIFY:CLASSIFY.cbl:53:17",
+              "origin": "CLASSIFY.cbl:53"
+            },
+            {
+              "line": 29,
+              "kind": "return",
+              "source_verb": "STOP",
+              "id": "CLASSIFY:CLASSIFY.cbl:54:18",
+              "origin": "CLASSIFY.cbl:54"
+            }
+          ],
+          "arguments": [],
+          "statements": 18,
+          "working_storage": true
+        }
+      ],
+      "steps": [
+        {
+          "name": "S010",
+          "program": "CLASSIFY",
+          "dds": {
+            "RAWIN": {
+              "line": 3,
+              "dsn": "SAMPLE.RAW",
+              "disp": "SHR"
+            },
+            "BDATE": {
+              "line": 4,
+              "dsn": "SAMPLE.BDATE",
+              "disp": "SHR"
+            },
+            "ACCEPT": {
+              "line": 5,
+              "dsn": "SAMPLE.ACCEPT",
+              "disp": "(NEW,CATLG,DELETE)"
+            },
+            "REJECT": {
+              "line": 6,
+              "dsn": "SAMPLE.REJECT",
+              "disp": "(NEW,CATLG,DELETE)"
+            }
+          },
+          "line": 2,
+          "source": "jcl/JOB001.jcl"
+        }
+      ],
+      "trace": {
+        "job": "JOB001",
+        "mode": "bounded-source-compiler",
+        "sources": [
+          "cobol/CLASSIFY.cbl",
+          "copybooks/ACCOUNT.cpy",
+          "jcl/JOB001.jcl"
+        ],
+        "statements": [
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:25:1",
+            "source": "CLASSIFY.cbl:25",
+            "kind": "open"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:26:2",
+            "source": "CLASSIFY.cbl:26",
+            "kind": "read"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:27:3",
+            "source": "CLASSIFY.cbl:27",
+            "kind": "return"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:28:4",
+            "source": "CLASSIFY.cbl:28",
+            "kind": "move"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:30:5",
+            "source": "CLASSIFY.cbl:30",
+            "kind": "close"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:31:6",
+            "source": "CLASSIFY.cbl:31",
+            "kind": "perform"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:32:7",
+            "source": "CLASSIFY.cbl:32",
+            "kind": "read"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:33:8",
+            "source": "CLASSIFY.cbl:33",
+            "kind": "move"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:35:9",
+            "source": "CLASSIFY.cbl:35",
+            "kind": "move"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:38:10",
+            "source": "CLASSIFY.cbl:38",
+            "kind": "if"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:39:11",
+            "source": "CLASSIFY.cbl:39",
+            "kind": "write"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:41:12",
+            "source": "CLASSIFY.cbl:41",
+            "kind": "if"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:42:13",
+            "source": "CLASSIFY.cbl:42",
+            "kind": "if"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:43:14",
+            "source": "CLASSIFY.cbl:43",
+            "kind": "write"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:45:15",
+            "source": "CLASSIFY.cbl:45",
+            "kind": "write"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:48:16",
+            "source": "CLASSIFY.cbl:48",
+            "kind": "write"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:53:17",
+            "source": "CLASSIFY.cbl:53",
+            "kind": "close"
+          },
+          {
+            "id": "CLASSIFY:CLASSIFY.cbl:54:18",
+            "source": "CLASSIFY.cbl:54",
+            "kind": "return"
+          }
+        ],
+        "steps": [
+          "S010"
+        ],
+        "programs": [
+          "CLASSIFY"
+        ]
+      }
+    },
+    {
+      "model_version": "portable-behavior-2.0",
+      "job": "JOB002",
+      "source": "jcl/JOB002.jcl",
+      "dependencies": [
+        "jcl/JOB002.jcl"
+      ],
+      "programs": [],
+      "steps": [
+        {
+          "name": "S010",
+          "program": "SORT",
+          "dds": {
+            "SORTIN": {
+              "line": 3,
+              "dsn": "SAMPLE.ACCEPT",
+              "disp": "SHR"
+            },
+            "SORTOUT": {
+              "line": 4,
+              "dsn": "SAMPLE.SORTED",
+              "disp": "(NEW,CATLG,DELETE)"
+            },
+            "SYSIN": {
+              "line": 5,
+              "inline": " SORT FIELDS=(1,6,CH,A)\n OPTION EQUALS"
+            }
+          },
+          "line": 2,
+          "source": "jcl/JOB002.jcl",
+          "sort_keys": [
+            [
+              1,
+              6,
+              "CH",
+              "A"
+            ]
+          ]
+        }
+      ],
+      "trace": {
+        "job": "JOB002",
+        "mode": "bounded-source-compiler",
+        "sources": [
+          "jcl/JOB002.jcl"
+        ],
+        "statements": [],
+        "steps": [
+          "S010"
+        ],
+        "programs": []
+      }
+    },
+    {
+      "model_version": "portable-behavior-2.0",
+      "job": "JOB003",
+      "source": "jcl/JOB003.jcl",
+      "dependencies": [
+        "cobol/CALCFEE.cbl",
+        "cobol/FEEPOST.cbl",
+        "copybooks/ACCOUNT.cpy",
+        "copybooks/FEE.cpy",
+        "jcl/JOB003.jcl"
+      ],
+      "programs": [
+        {
+          "name": "CALCFEE",
+          "source": "CALCFEE.cbl",
+          "layout": [
+            {
+              "name": "L-AMOUNT",
+              "root": "L-AMOUNT",
+              "offset": 0,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "L-TYPE",
+              "root": "L-TYPE",
+              "offset": 0,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "L-FEE",
+              "root": "L-FEE",
+              "offset": 0,
+              "length": 6,
+              "kind": "number",
+              "scale": 0
+            }
+          ],
+          "files": {},
+          "tree": [
+            {
+              "line": 2,
+              "kind": "if",
+              "condition": {
+                "kind": "binary",
+                "op": "=",
+                "left": {
+                  "kind": "field",
+                  "name": "L-TYPE"
+                },
+                "right": {
+                  "kind": "text",
+                  "value": "X"
+                }
+              },
+              "yes": [
+                {
+                  "line": 3,
+                  "kind": "move",
+                  "value": {
+                    "kind": "number",
+                    "value": "7"
+                  },
+                  "targets": [
+                    "L-FEE"
+                  ],
+                  "id": "CALCFEE:CALCFEE.cbl:11:2",
+                  "origin": "CALCFEE.cbl:11"
+                }
+              ],
+              "no": [
+                {
+                  "line": 5,
+                  "kind": "compute",
+                  "target": "L-FEE",
+                  "value": {
+                    "kind": "binary",
+                    "op": "/",
+                    "left": {
+                      "kind": "field",
+                      "name": "L-AMOUNT"
+                    },
+                    "right": {
+                      "kind": "number",
+                      "value": "100"
+                    }
+                  },
+                  "id": "CALCFEE:CALCFEE.cbl:14:3",
+                  "origin": "CALCFEE.cbl:14"
+                }
+              ],
+              "id": "CALCFEE:CALCFEE.cbl:9:1",
+              "origin": "CALCFEE.cbl:9"
+            },
+            {
+              "line": 7,
+              "kind": "return",
+              "source_verb": "GOBACK",
+              "id": "CALCFEE:CALCFEE.cbl:16:4",
+              "origin": "CALCFEE.cbl:16"
+            }
+          ],
+          "arguments": [
+            "L-AMOUNT",
+            "L-TYPE",
+            "L-FEE"
+          ],
+          "statements": 4,
+          "working_storage": false
+        },
+        {
+          "name": "FEEPOST",
+          "source": "FEEPOST.cbl",
+          "layout": [
+            {
+              "name": "IN-RECORD",
+              "root": "IN-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "OUT-RECORD",
+              "root": "OUT-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "C-RECORD",
+              "root": "C-RECORD",
+              "offset": 0,
+              "length": 23,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "C-ACCOUNT",
+              "root": "C-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "C-AMOUNT",
+              "root": "C-RECORD",
+              "offset": 6,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "C-DATE",
+              "root": "C-RECORD",
+              "offset": 14,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "C-TYPE",
+              "root": "C-RECORD",
+              "offset": 22,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-RECORD",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "F-ACCOUNT",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-AMOUNT",
+              "root": "F-RECORD",
+              "offset": 6,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-DATE",
+              "root": "F-RECORD",
+              "offset": 14,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-TYPE",
+              "root": "F-RECORD",
+              "offset": 22,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-FEE",
+              "root": "F-RECORD",
+              "offset": 23,
+              "length": 6,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "FINISHED",
+              "root": "FINISHED",
+              "offset": 0,
+              "length": 1,
+              "kind": "text",
+              "scale": 0,
+              "value": "N"
+            }
+          ],
+          "files": {
+            "INFILE": {
+              "dd": "SORTED",
+              "record": "IN-RECORD"
+            },
+            "OUTFILE": {
+              "dd": "FEES",
+              "record": "OUT-RECORD"
+            }
+          },
+          "tree": [
+            {
+              "line": 2,
+              "kind": "open",
+              "files": [
+                [
+                  "INPUT",
+                  "INFILE"
+                ],
+                [
+                  "OUTPUT",
+                  "OUTFILE"
+                ]
+              ],
+              "id": "FEEPOST:FEEPOST.cbl:19:1",
+              "origin": "FEEPOST.cbl:19"
+            },
+            {
+              "line": 3,
+              "kind": "perform",
+              "condition": {
+                "kind": "binary",
+                "op": "=",
+                "left": {
+                  "kind": "field",
+                  "name": "FINISHED"
+                },
+                "right": {
+                  "kind": "text",
+                  "value": "Y"
+                }
+              },
+              "body": [
+                {
+                  "line": 4,
+                  "kind": "read",
+                  "file": "INFILE",
+                  "end": [
+                    {
+                      "line": 5,
+                      "kind": "move",
+                      "value": {
+                        "kind": "text",
+                        "value": "Y"
+                      },
+                      "targets": [
+                        "FINISHED"
+                      ],
+                      "id": "FEEPOST:FEEPOST.cbl:22:4",
+                      "origin": "FEEPOST.cbl:22"
+                    }
+                  ],
+                  "record": [
+                    {
+                      "line": 7,
+                      "kind": "move",
+                      "value": {
+                        "kind": "field",
+                        "name": "IN-RECORD"
+                      },
+                      "targets": [
+                        "C-RECORD"
+                      ],
+                      "id": "FEEPOST:FEEPOST.cbl:24:5",
+                      "origin": "FEEPOST.cbl:24"
+                    },
+                    {
+                      "line": 8,
+                      "kind": "move",
+                      "value": {
+                        "kind": "field",
+                        "name": "C-RECORD"
+                      },
+                      "targets": [
+                        "F-RECORD"
+                      ],
+                      "id": "FEEPOST:FEEPOST.cbl:25:6",
+                      "origin": "FEEPOST.cbl:25"
+                    },
+                    {
+                      "line": 9,
+                      "kind": "call",
+                      "program": "CALCFEE",
+                      "arguments": [
+                        "C-AMOUNT",
+                        "C-TYPE",
+                        "F-FEE"
+                      ],
+                      "id": "FEEPOST:FEEPOST.cbl:26:7",
+                      "origin": "FEEPOST.cbl:26"
+                    },
+                    {
+                      "line": 10,
+                      "kind": "write",
+                      "record": "OUT-RECORD",
+                      "value": {
+                        "kind": "field",
+                        "name": "F-RECORD"
+                      },
+                      "id": "FEEPOST:FEEPOST.cbl:27:8",
+                      "origin": "FEEPOST.cbl:27"
+                    }
+                  ],
+                  "id": "FEEPOST:FEEPOST.cbl:21:3",
+                  "origin": "FEEPOST.cbl:21"
+                }
+              ],
+              "id": "FEEPOST:FEEPOST.cbl:20:2",
+              "origin": "FEEPOST.cbl:20"
+            },
+            {
+              "line": 13,
+              "kind": "close",
+              "files": [
+                "INFILE",
+                "OUTFILE"
+              ],
+              "id": "FEEPOST:FEEPOST.cbl:30:9",
+              "origin": "FEEPOST.cbl:30"
+            },
+            {
+              "line": 14,
+              "kind": "return",
+              "source_verb": "STOP",
+              "id": "FEEPOST:FEEPOST.cbl:31:10",
+              "origin": "FEEPOST.cbl:31"
+            }
+          ],
+          "arguments": [],
+          "statements": 10,
+          "working_storage": true
+        }
+      ],
+      "steps": [
+        {
+          "name": "S010",
+          "program": "FEEPOST",
+          "dds": {
+            "SORTED": {
+              "line": 3,
+              "dsn": "SAMPLE.SORTED",
+              "disp": "SHR"
+            },
+            "FEES": {
+              "line": 4,
+              "dsn": "SAMPLE.FEES",
+              "disp": "(NEW,CATLG,DELETE)"
+            }
+          },
+          "line": 2,
+          "source": "jcl/JOB003.jcl"
+        }
+      ],
+      "trace": {
+        "job": "JOB003",
+        "mode": "bounded-source-compiler",
+        "sources": [
+          "cobol/CALCFEE.cbl",
+          "cobol/FEEPOST.cbl",
+          "copybooks/ACCOUNT.cpy",
+          "copybooks/FEE.cpy",
+          "jcl/JOB003.jcl"
+        ],
+        "statements": [
+          {
+            "id": "CALCFEE:CALCFEE.cbl:9:1",
+            "source": "CALCFEE.cbl:9",
+            "kind": "if"
+          },
+          {
+            "id": "CALCFEE:CALCFEE.cbl:11:2",
+            "source": "CALCFEE.cbl:11",
+            "kind": "move"
+          },
+          {
+            "id": "CALCFEE:CALCFEE.cbl:14:3",
+            "source": "CALCFEE.cbl:14",
+            "kind": "compute"
+          },
+          {
+            "id": "CALCFEE:CALCFEE.cbl:16:4",
+            "source": "CALCFEE.cbl:16",
+            "kind": "return"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:19:1",
+            "source": "FEEPOST.cbl:19",
+            "kind": "open"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:20:2",
+            "source": "FEEPOST.cbl:20",
+            "kind": "perform"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:21:3",
+            "source": "FEEPOST.cbl:21",
+            "kind": "read"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:22:4",
+            "source": "FEEPOST.cbl:22",
+            "kind": "move"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:24:5",
+            "source": "FEEPOST.cbl:24",
+            "kind": "move"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:25:6",
+            "source": "FEEPOST.cbl:25",
+            "kind": "move"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:26:7",
+            "source": "FEEPOST.cbl:26",
+            "kind": "call"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:27:8",
+            "source": "FEEPOST.cbl:27",
+            "kind": "write"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:30:9",
+            "source": "FEEPOST.cbl:30",
+            "kind": "close"
+          },
+          {
+            "id": "FEEPOST:FEEPOST.cbl:31:10",
+            "source": "FEEPOST.cbl:31",
+            "kind": "return"
+          }
+        ],
+        "steps": [
+          "S010"
+        ],
+        "programs": [
+          "CALCFEE",
+          "FEEPOST"
+        ]
+      }
+    },
+    {
+      "model_version": "portable-behavior-2.0",
+      "job": "JOB004",
+      "source": "jcl/JOB004.jcl",
+      "dependencies": [
+        "cobol/LOADDB.cbl",
+        "copybooks/FEE.cpy",
+        "jcl/JOB004.jcl"
+      ],
+      "programs": [
+        {
+          "name": "LOADDB",
+          "source": "LOADDB.cbl",
+          "layout": [
+            {
+              "name": "IN-RECORD",
+              "root": "IN-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-RECORD",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "F-ACCOUNT",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-AMOUNT",
+              "root": "F-RECORD",
+              "offset": 6,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-DATE",
+              "root": "F-RECORD",
+              "offset": 14,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-TYPE",
+              "root": "F-RECORD",
+              "offset": 22,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-FEE",
+              "root": "F-RECORD",
+              "offset": 23,
+              "length": 6,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "FINISHED",
+              "root": "FINISHED",
+              "offset": 0,
+              "length": 1,
+              "kind": "text",
+              "scale": 0,
+              "value": "N"
+            },
+            {
+              "name": "ROW-NUMBER",
+              "root": "ROW-NUMBER",
+              "offset": 0,
+              "length": 6,
+              "kind": "number",
+              "scale": 0,
+              "value": "0"
+            }
+          ],
+          "files": {
+            "INFILE": {
+              "dd": "FEES",
+              "record": "IN-RECORD"
+            }
+          },
+          "tree": [
+            {
+              "line": 2,
+              "kind": "open",
+              "files": [
+                [
+                  "INPUT",
+                  "INFILE"
+                ]
+              ],
+              "id": "LOADDB:LOADDB.cbl:16:1",
+              "origin": "LOADDB.cbl:16"
+            },
+            {
+              "line": 3,
+              "kind": "perform",
+              "condition": {
+                "kind": "binary",
+                "op": "=",
+                "left": {
+                  "kind": "field",
+                  "name": "FINISHED"
+                },
+                "right": {
+                  "kind": "text",
+                  "value": "Y"
+                }
+              },
+              "body": [
+                {
+                  "line": 4,
+                  "kind": "read",
+                  "file": "INFILE",
+                  "end": [
+                    {
+                      "line": 5,
+                      "kind": "move",
+                      "value": {
+                        "kind": "text",
+                        "value": "Y"
+                      },
+                      "targets": [
+                        "FINISHED"
+                      ],
+                      "id": "LOADDB:LOADDB.cbl:19:4",
+                      "origin": "LOADDB.cbl:19"
+                    }
+                  ],
+                  "record": [
+                    {
+                      "line": 7,
+                      "kind": "move",
+                      "value": {
+                        "kind": "field",
+                        "name": "IN-RECORD"
+                      },
+                      "targets": [
+                        "F-RECORD"
+                      ],
+                      "id": "LOADDB:LOADDB.cbl:21:5",
+                      "origin": "LOADDB.cbl:21"
+                    },
+                    {
+                      "line": 8,
+                      "kind": "add",
+                      "value": {
+                        "kind": "number",
+                        "value": "1"
+                      },
+                      "targets": [
+                        "ROW-NUMBER"
+                      ],
+                      "id": "LOADDB:LOADDB.cbl:22:6",
+                      "origin": "LOADDB.cbl:22"
+                    },
+                    {
+                      "line": 9,
+                      "kind": "insert",
+                      "table": "ACCOUNT_LEDGER",
+                      "columns": [
+                        "SEQ",
+                        "ACCOUNT_ID",
+                        "AMOUNT_CENTS",
+                        "BUSINESS_DATE",
+                        "CATEGORY",
+                        "FEE_CENTS"
+                      ],
+                      "values": [
+                        "ROW-NUMBER",
+                        "F-ACCOUNT",
+                        "F-AMOUNT",
+                        "F-DATE",
+                        "F-TYPE",
+                        "F-FEE"
+                      ],
+                      "id": "LOADDB:LOADDB.cbl:23:7",
+                      "origin": "LOADDB.cbl:23"
+                    }
+                  ],
+                  "id": "LOADDB:LOADDB.cbl:18:3",
+                  "origin": "LOADDB.cbl:18"
+                }
+              ],
+              "id": "LOADDB:LOADDB.cbl:17:2",
+              "origin": "LOADDB.cbl:17"
+            },
+            {
+              "line": 17,
+              "kind": "close",
+              "files": [
+                "INFILE"
+              ],
+              "id": "LOADDB:LOADDB.cbl:31:8",
+              "origin": "LOADDB.cbl:31"
+            },
+            {
+              "line": 18,
+              "kind": "commit",
+              "id": "LOADDB:LOADDB.cbl:32:9",
+              "origin": "LOADDB.cbl:32"
+            },
+            {
+              "line": 19,
+              "kind": "return",
+              "source_verb": "STOP",
+              "id": "LOADDB:LOADDB.cbl:33:10",
+              "origin": "LOADDB.cbl:33"
+            }
+          ],
+          "arguments": [],
+          "statements": 10,
+          "working_storage": true
+        }
+      ],
+      "steps": [
+        {
+          "name": "S010",
+          "program": "IEBGENER",
+          "dds": {
+            "SYSUT1": {
+              "line": 3,
+              "dsn": "SAMPLE.FEES",
+              "disp": "SHR"
+            },
+            "SYSUT2": {
+              "line": 4,
+              "dsn": "SAMPLE.AUDIT",
+              "disp": "(NEW,CATLG,DELETE)"
+            },
+            "SYSIN": {
+              "line": 5,
+              "dummy": true
+            }
+          },
+          "line": 2,
+          "source": "jcl/JOB004.jcl"
+        },
+        {
+          "name": "S020",
+          "program": "LOADDB",
+          "dds": {
+            "FEES": {
+              "line": 7,
+              "dsn": "SAMPLE.FEES",
+              "disp": "SHR"
+            }
+          },
+          "line": 6,
+          "source": "jcl/JOB004.jcl"
+        }
+      ],
+      "trace": {
+        "job": "JOB004",
+        "mode": "bounded-source-compiler",
+        "sources": [
+          "cobol/LOADDB.cbl",
+          "copybooks/FEE.cpy",
+          "jcl/JOB004.jcl"
+        ],
+        "statements": [
+          {
+            "id": "LOADDB:LOADDB.cbl:16:1",
+            "source": "LOADDB.cbl:16",
+            "kind": "open"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:17:2",
+            "source": "LOADDB.cbl:17",
+            "kind": "perform"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:18:3",
+            "source": "LOADDB.cbl:18",
+            "kind": "read"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:19:4",
+            "source": "LOADDB.cbl:19",
+            "kind": "move"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:21:5",
+            "source": "LOADDB.cbl:21",
+            "kind": "move"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:22:6",
+            "source": "LOADDB.cbl:22",
+            "kind": "add"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:23:7",
+            "source": "LOADDB.cbl:23",
+            "kind": "insert"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:31:8",
+            "source": "LOADDB.cbl:31",
+            "kind": "close"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:32:9",
+            "source": "LOADDB.cbl:32",
+            "kind": "commit"
+          },
+          {
+            "id": "LOADDB:LOADDB.cbl:33:10",
+            "source": "LOADDB.cbl:33",
+            "kind": "return"
+          }
+        ],
+        "steps": [
+          "S010",
+          "S020"
+        ],
+        "programs": [
+          "LOADDB"
+        ]
+      }
+    },
+    {
+      "model_version": "portable-behavior-2.0",
+      "job": "JOB005",
+      "source": "jcl/JOB005.jcl",
+      "dependencies": [
+        "cobol/TOTALS.cbl",
+        "copybooks/FEE.cpy",
+        "jcl/JOB005.jcl"
+      ],
+      "programs": [
+        {
+          "name": "TOTALS",
+          "source": "TOTALS.cbl",
+          "layout": [
+            {
+              "name": "IN-RECORD",
+              "root": "IN-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "OUT-RECORD",
+              "root": "OUT-RECORD",
+              "offset": 0,
+              "length": 28,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-RECORD",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 29,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "F-ACCOUNT",
+              "root": "F-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-AMOUNT",
+              "root": "F-RECORD",
+              "offset": 6,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-DATE",
+              "root": "F-RECORD",
+              "offset": 14,
+              "length": 8,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "F-TYPE",
+              "root": "F-RECORD",
+              "offset": 22,
+              "length": 1,
+              "kind": "text",
+              "scale": 0
+            },
+            {
+              "name": "F-FEE",
+              "root": "F-RECORD",
+              "offset": 23,
+              "length": 6,
+              "kind": "number",
+              "scale": 0
+            },
+            {
+              "name": "FINISHED",
+              "root": "FINISHED",
+              "offset": 0,
+              "length": 1,
+              "kind": "text",
+              "scale": 0,
+              "value": "N"
+            },
+            {
+              "name": "TOTAL-RECORD",
+              "root": "TOTAL-RECORD",
+              "offset": 0,
+              "length": 28,
+              "kind": "group",
+              "scale": 0
+            },
+            {
+              "name": "ITEM-COUNT",
+              "root": "TOTAL-RECORD",
+              "offset": 0,
+              "length": 6,
+              "kind": "number",
+              "scale": 0,
+              "value": "0"
+            },
+            {
+              "name": "TOTAL-AMOUNT",
+              "root": "TOTAL-RECORD",
+              "offset": 6,
+              "length": 12,
+              "kind": "number",
+              "scale": 0,
+              "value": "0"
+            },
+            {
+              "name": "TOTAL-FEE",
+              "root": "TOTAL-RECORD",
+              "offset": 18,
+              "length": 10,
+              "kind": "number",
+              "scale": 0,
+              "value": "0"
+            }
+          ],
+          "files": {
+            "INFILE": {
+              "dd": "FEES",
+              "record": "IN-RECORD"
+            },
+            "OUTFILE": {
+              "dd": "TOTAL",
+              "record": "OUT-RECORD"
+            }
+          },
+          "tree": [
+            {
+              "line": 2,
+              "kind": "open",
+              "files": [
+                [
+                  "INPUT",
+                  "INFILE"
+                ],
+                [
+                  "OUTPUT",
+                  "OUTFILE"
+                ]
+              ],
+              "id": "TOTALS:TOTALS.cbl:22:1",
+              "origin": "TOTALS.cbl:22"
+            },
+            {
+              "line": 3,
+              "kind": "perform",
+              "condition": {
+                "kind": "binary",
+                "op": "=",
+                "left": {
+                  "kind": "field",
+                  "name": "FINISHED"
+                },
+                "right": {
+                  "kind": "text",
+                  "value": "Y"
+                }
+              },
+              "body": [
+                {
+                  "line": 4,
+                  "kind": "read",
+                  "file": "INFILE",
+                  "end": [
+                    {
+                      "line": 5,
+                      "kind": "move",
+                      "value": {
+                        "kind": "text",
+                        "value": "Y"
+                      },
+                      "targets": [
+                        "FINISHED"
+                      ],
+                      "id": "TOTALS:TOTALS.cbl:25:4",
+                      "origin": "TOTALS.cbl:25"
+                    }
+                  ],
+                  "record": [
+                    {
+                      "line": 7,
+                      "kind": "move",
+                      "value": {
+                        "kind": "field",
+                        "name": "IN-RECORD"
+                      },
+                      "targets": [
+                        "F-RECORD"
+                      ],
+                      "id": "TOTALS:TOTALS.cbl:27:5",
+                      "origin": "TOTALS.cbl:27"
+                    },
+                    {
+                      "line": 8,
+                      "kind": "add",
+                      "value": {
+                        "kind": "number",
+                        "value": "1"
+                      },
+                      "targets": [
+                        "ITEM-COUNT"
+                      ],
+                      "id": "TOTALS:TOTALS.cbl:28:6",
+                      "origin": "TOTALS.cbl:28"
+                    },
+                    {
+                      "line": 9,
+                      "kind": "add",
+                      "value": {
+                        "kind": "field",
+                        "name": "F-AMOUNT"
+                      },
+                      "targets": [
+                        "TOTAL-AMOUNT"
+                      ],
+                      "id": "TOTALS:TOTALS.cbl:29:7",
+                      "origin": "TOTALS.cbl:29"
+                    },
+                    {
+                      "line": 10,
+                      "kind": "add",
+                      "value": {
+                        "kind": "field",
+                        "name": "F-FEE"
+                      },
+                      "targets": [
+                        "TOTAL-FEE"
+                      ],
+                      "id": "TOTALS:TOTALS.cbl:30:8",
+                      "origin": "TOTALS.cbl:30"
+                    }
+                  ],
+                  "id": "TOTALS:TOTALS.cbl:24:3",
+                  "origin": "TOTALS.cbl:24"
+                }
+              ],
+              "id": "TOTALS:TOTALS.cbl:23:2",
+              "origin": "TOTALS.cbl:23"
+            },
+            {
+              "line": 13,
+              "kind": "write",
+              "record": "OUT-RECORD",
+              "value": {
+                "kind": "field",
+                "name": "TOTAL-RECORD"
+              },
+              "id": "TOTALS:TOTALS.cbl:33:9",
+              "origin": "TOTALS.cbl:33"
+            },
+            {
+              "line": 14,
+              "kind": "close",
+              "files": [
+                "INFILE",
+                "OUTFILE"
+              ],
+              "id": "TOTALS:TOTALS.cbl:34:10",
+              "origin": "TOTALS.cbl:34"
+            },
+            {
+              "line": 15,
+              "kind": "return",
+              "source_verb": "STOP",
+              "id": "TOTALS:TOTALS.cbl:35:11",
+              "origin": "TOTALS.cbl:35"
+            }
+          ],
+          "arguments": [],
+          "statements": 11,
+          "working_storage": true
+        }
+      ],
+      "steps": [
+        {
+          "name": "S010",
+          "program": "TOTALS",
+          "dds": {
+            "FEES": {
+              "line": 3,
+              "dsn": "SAMPLE.FEES",
+              "disp": "SHR"
+            },
+            "TOTAL": {
+              "line": 4,
+              "dsn": "SAMPLE.TOTAL",
+              "disp": "(NEW,CATLG,DELETE)"
+            }
+          },
+          "line": 2,
+          "source": "jcl/JOB005.jcl"
+        }
+      ],
+      "trace": {
+        "job": "JOB005",
+        "mode": "bounded-source-compiler",
+        "sources": [
+          "cobol/TOTALS.cbl",
+          "copybooks/FEE.cpy",
+          "jcl/JOB005.jcl"
+        ],
+        "statements": [
+          {
+            "id": "TOTALS:TOTALS.cbl:22:1",
+            "source": "TOTALS.cbl:22",
+            "kind": "open"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:23:2",
+            "source": "TOTALS.cbl:23",
+            "kind": "perform"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:24:3",
+            "source": "TOTALS.cbl:24",
+            "kind": "read"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:25:4",
+            "source": "TOTALS.cbl:25",
+            "kind": "move"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:27:5",
+            "source": "TOTALS.cbl:27",
+            "kind": "move"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:28:6",
+            "source": "TOTALS.cbl:28",
+            "kind": "add"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:29:7",
+            "source": "TOTALS.cbl:29",
+            "kind": "add"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:30:8",
+            "source": "TOTALS.cbl:30",
+            "kind": "add"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:33:9",
+            "source": "TOTALS.cbl:33",
+            "kind": "write"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:34:10",
+            "source": "TOTALS.cbl:34",
+            "kind": "close"
+          },
+          {
+            "id": "TOTALS:TOTALS.cbl:35:11",
+            "source": "TOTALS.cbl:35",
+            "kind": "return"
+          }
+        ],
+        "steps": [
+          "S010"
+        ],
+        "programs": [
+          "TOTALS"
+        ]
+      }
+    }
+  ],
+  "schema": {
+    "ACCOUNT_LEDGER": {
+      "columns": {
+        "SEQ": {
+          "name": "SEQ",
+          "nullable": false,
+          "source_type": "INTEGER",
+          "kind": "integer",
+          "minimum": "-2147483648",
+          "maximum": "2147483647"
+        },
+        "ACCOUNT_ID": {
+          "name": "ACCOUNT_ID",
+          "nullable": false,
+          "source_type": "CHAR",
+          "kind": "text",
+          "length": 6
+        },
+        "AMOUNT_CENTS": {
+          "name": "AMOUNT_CENTS",
+          "nullable": false,
+          "source_type": "INTEGER",
+          "kind": "integer",
+          "minimum": "-2147483648",
+          "maximum": "2147483647"
+        },
+        "BUSINESS_DATE": {
+          "name": "BUSINESS_DATE",
+          "nullable": false,
+          "source_type": "INTEGER",
+          "kind": "integer",
+          "minimum": "-2147483648",
+          "maximum": "2147483647"
+        },
+        "CATEGORY": {
+          "name": "CATEGORY",
+          "nullable": false,
+          "source_type": "CHAR",
+          "kind": "text",
+          "length": 1
+        },
+        "FEE_CENTS": {
+          "name": "FEE_CENTS",
+          "nullable": false,
+          "source_type": "INTEGER",
+          "kind": "integer",
+          "minimum": "-2147483648",
+          "maximum": "2147483647"
+        }
+      },
+      "primary_key": [
+        "SEQ"
+      ],
+      "column_order": [
+        "SEQ",
+        "ACCOUNT_ID",
+        "AMOUNT_CENTS",
+        "BUSINESS_DATE",
+        "CATEGORY",
+        "FEE_CENTS"
+      ]
+    }
+  },
+  "codepages": {
+    "cp037": "\u0000\u0001\u0002\u0003\u009c\t\u0086\u007f\u0097\u008d\u008e\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u009d\u0085\b\u0087\u0018\u0019\u0092\u008f\u001c\u001d\u001e\u001f\u0080\u0081\u0082\u0083\u0084\n\u0017\u001b\u0088\u0089\u008a\u008b\u008c\u0005\u0006\u0007\u0090\u0091\u0016\u0093\u0094\u0095\u0096\u0004\u0098\u0099\u009a\u009b\u0014\u0015\u009e\u001a \u00a0\u00e2\u00e4\u00e0\u00e1\u00e3\u00e5\u00e7\u00f1\u00a2.<(+|&\u00e9\u00ea\u00eb\u00e8\u00ed\u00ee\u00ef\u00ec\u00df!$*);\u00ac-/\u00c2\u00c4\u00c0\u00c1\u00c3\u00c5\u00c7\u00d1\u00a6,%_>?\u00f8\u00c9\u00ca\u00cb\u00c8\u00cd\u00ce\u00cf\u00cc`:#@'=\"\u00d8abcdefghi\u00ab\u00bb\u00f0\u00fd\u00fe\u00b1\u00b0jklmnopqr\u00aa\u00ba\u00e6\u00b8\u00c6\u00a4\u00b5~stuvwxyz\u00a1\u00bf\u00d0\u00dd\u00de\u00ae^\u00a3\u00a5\u00b7\u00a9\u00a7\u00b6\u00bc\u00bd\u00be[]\u00af\u00a8\u00b4\u00d7{ABCDEFGHI\u00ad\u00f4\u00f6\u00f2\u00f3\u00f5}JKLMNOPQR\u00b9\u00fb\u00fc\u00f9\u00fa\u00ff\\\u00f7STUVWXYZ\u00b2\u00d4\u00d6\u00d2\u00d3\u00d50123456789\u00b3\u00db\u00dc\u00d9\u00da\u009f"
+  },
+  "datasets": {
+    "SAMPLE.RAW": {
+      "role": "input",
+      "path": "inputs/raw.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.BDATE": {
+      "role": "input",
+      "path": "inputs/date.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 8
+    },
+    "SAMPLE.ACCEPT": {
+      "role": "intermediate",
+      "path": "files/accept.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.REJECT": {
+      "role": "output",
+      "path": "files/reject.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.SORTED": {
+      "role": "intermediate",
+      "path": "files/sorted.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 23
+    },
+    "SAMPLE.FEES": {
+      "role": "output",
+      "path": "files/fees.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 29
+    },
+    "SAMPLE.AUDIT": {
+      "role": "output",
+      "path": "files/audit.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 29
+    },
+    "SAMPLE.TOTAL": {
+      "role": "output",
+      "path": "files/total.bin",
+      "format": "fixed",
+      "encoding": "cp037",
+      "record_length": 28
+    }
+  },
+  "collation": "cp037",
+  "connections": {
+    "oracle": {
+      "dsn_env": "MIGRATION_ORACLE_DSN",
+      "user_env": "MIGRATION_ORACLE_USER",
+      "password_env": "MIGRATION_ORACLE_PASSWORD"
+    },
+    "bigquery": {
+      "project_env": "MIGRATION_BQ_PROJECT",
+      "dataset_env": "MIGRATION_BQ_DATASET",
+      "location_env": "MIGRATION_BQ_LOCATION",
+      "token_env": "MIGRATION_BQ_ACCESS_TOKEN"
+    }
+  },
+  "capability_blockers": [],
+  "execution_order": [
+    "JOB001",
+    "JOB002",
+    "JOB003",
+    "JOB004",
+    "JOB005"
+  ],
+  "max_sort_records": 100000
+}

@@ -1,0 +1,63 @@
+{
+  "ACCOUNT_LEDGER": {
+    "columns": {
+      "SEQ": {
+        "name": "SEQ",
+        "nullable": false,
+        "source_type": "INTEGER",
+        "kind": "integer",
+        "minimum": "-2147483648",
+        "maximum": "2147483647"
+      },
+      "ACCOUNT_ID": {
+        "name": "ACCOUNT_ID",
+        "nullable": false,
+        "source_type": "CHAR",
+        "kind": "text",
+        "length": 6
+      },
+      "AMOUNT_CENTS": {
+        "name": "AMOUNT_CENTS",
+        "nullable": false,
+        "source_type": "INTEGER",
+        "kind": "integer",
+        "minimum": "-2147483648",
+        "maximum": "2147483647"
+      },
+      "BUSINESS_DATE": {
+        "name": "BUSINESS_DATE",
+        "nullable": false,
+        "source_type": "INTEGER",
+        "kind": "integer",
+        "minimum": "-2147483648",
+        "maximum": "2147483647"
+      },
+      "CATEGORY": {
+        "name": "CATEGORY",
+        "nullable": false,
+        "source_type": "CHAR",
+        "kind": "text",
+        "length": 1
+      },
+      "FEE_CENTS": {
+        "name": "FEE_CENTS",
+        "nullable": false,
+        "source_type": "INTEGER",
+        "kind": "integer",
+        "minimum": "-2147483648",
+        "maximum": "2147483647"
+      }
+    },
+    "primary_key": [
+      "SEQ"
+    ],
+    "column_order": [
+      "SEQ",
+      "ACCOUNT_ID",
+      "AMOUNT_CENTS",
+      "BUSINESS_DATE",
+      "CATEGORY",
+      "FEE_CENTS"
+    ]
+  }
+}

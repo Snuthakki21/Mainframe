@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "artifact_id": "9908a4df66ac09e4c9ce07c12d9b1507ffea4555090ebd3652bb48f208613a2c",
+  "target": "dotnet-bigquery",
+  "files": {
+    "Dec.cs": "7441be159ba61a1bffaa8cc29983066f8906f5c3960e35ae94761f54cdcd277b",
+    "Json.cs": "64aad52679c9402cbd4f7a2d3f169707bc3a79b0e8526d35dd21306db6dc6785",
+    "Main.cs": "c5624f4c375bab03bf38840a36ff9260570a00ef8d29ca098962b89ca907376e",
+    "MfDatabase.cs": "9f2ca7549ef60683cb6b81e59b6587e744e992b29f2d72532664bdffc696ab96",
+    "MfRuntime.cs": "1716b60a1336af2e1d003ea0dfe7595f72467776251c88923afabef643ab5436",
+    "MigratedProcess.csproj": "e8d102ade7a6bc691a0b0e0611d13c3813c73c08e5e73b21b829b984bb990437",
+    "NuGet.Config": "2142cfb2dfa2c7feefbe40fabcc68b0dfecadafa99a1db9b70239d977cf2a7ef",
+    "README.md": "36629cad201f6165faca1e5a4a7aebb68c56fedcfdd11fe8fc33e5386207f44e",
+    "database/capabilities.json": "729482a2155903dfe520b1e1e10d59e59a2a5caa38ddaf0561978449edfe59bf",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "9713d32132df3af2d1a126e6f25449c7ff58fa6c926cb9a5bbd3b9a4f72966e0",
+    "dependencies.json": "4ab0ffdfb7a38dba12da2d71627b65bb6d3325518d70ef2fa05f1c34169a2588",
+    "jobs/JOB001.cs": "261d04345f00163bdf61cbef6ef73b80a4ccf28cb8b64f7df47361bfe582e910",
+    "jobs/JOB002.cs": "6537e85ff97b1c5e3d5148e8981d04cdba92840d68024a98a200ca05963f9035",
+    "jobs/JOB003.cs": "c99dd8bd0726f105a582b49fe9cbc5e261a03833b0ed86d31c6bef4b5a4990f9",
+    "jobs/JOB004.cs": "a5f36e239d3ac4d1bf698481d0b1251e3a6419ad8e7f4ad682e6346a5e7e0443",
+    "jobs/JOB005.cs": "56c70ec5656ba70f76abbae78618c1304ee91e8fedbdd1d7977065ea7afd793b",
+    "package.json": "b64b69988eed4fbced32d93dfbc7205f7fb87df64418ba576aa4b6fa35f74afb",
+    "target.json": "6e4ca03b65b3d19e0d3b14f50eb8230b7bd0a54e5b3f76a400976cca1393de12"
+  }
+}

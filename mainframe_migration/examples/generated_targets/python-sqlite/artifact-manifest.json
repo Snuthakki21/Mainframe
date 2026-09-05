@@ -1,0 +1,23 @@
+{
+  "schema_version": 2,
+  "artifact_id": "53b4938b7c4d887440d98e2fceb0531eac48d1be6b3b0dcec4bf6e4b8c51cde0",
+  "target": "python-sqlite",
+  "files": {
+    "README.md": "92ac71848a3e71c9120b3311f1eea103cebe5349123e31f53532836d54d4fb5b",
+    "_common.py": "f53b18853fec5f62ccfd97c24d272f4c8fe5bf1514266ca586c8e2c6bc7ab5c4",
+    "_database.py": "c84d8cc2fa7d207eebb0ae07faef4f578fc462e7f9f1adb7886a547c57c9f7a6",
+    "_entry.py": "56f9d8ddb241701cca4ab768ab8e78fae6b69c87991c47e5ae8e4bd2762e50d9",
+    "_runtime.py": "e55df7356bdb40e99239894183974bbd48b249922b6404290baf6cd3ce6518dd",
+    "database/capabilities.json": "e3f078535716f86fdd231b9323de89cfca0754775065e249e8af886d31f9ff7f",
+    "database/logical_schema.json": "6d6d8464e3828c05ecb54fbe059f9bdec6aa2d5cfd5a68a3bd077a6752b4ddf4",
+    "database/schema.sql": "3ca7e672023cd2e46652e4e2dfcadeae394cee162697feeccaf68c85a4e94c8e",
+    "dependencies.json": "4ab0ffdfb7a38dba12da2d71627b65bb6d3325518d70ef2fa05f1c34169a2588",
+    "jobs/JOB001.py": "11b8f31ee7788a42b1e44ca33baa1f5289fd4e99ac0f7279660f161dd6e416c5",
+    "jobs/JOB002.py": "3e9c89d58451ebd1793a32d4afc799835622e74bd86805d860ce9898c465326b",
+    "jobs/JOB003.py": "ce16e79b97dcc89b9d6ea269959275defbb29a39964d7854781efca7f2f35c79",
+    "jobs/JOB004.py": "e27a863e8995184471b50424d202d6ad091060fea17a3af5ff032654e73ae05c",
+    "jobs/JOB005.py": "0d32c0e86e1e12954eaabe76a5a0809e9c2a4f835b31d4520bb715122a8c52fe",
+    "package.json": "0374c2bc787b856228c767ede06c4917dd9e75ed38c320edfaa96688d549584d",
+    "target.json": "8f3798775722cf75fe601e4df2ec1b08310671fd228530376316ce3c4321767a"
+  }
+}
