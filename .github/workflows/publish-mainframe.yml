@@ -1,0 +1,33 @@
+name: Publish the original mainframe package
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.delivery/READY.json'
+      - '.github/workflows/publish-mainframe.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Materialize only a complete hash-checked delivery
+        if: hashFiles('.delivery/READY.json') != ''
+        run: python3 .delivery/materialize.py
+      - name: Commit published files and remove transport files
+        if: hashFiles('.delivery/READY.json') != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- README.md mainframe-modernization-framework
+          git rm -r -- .delivery
+          git commit -m 'Publish original v2 framework, portable folder, prompts, presentation and evidence'
+          git push origin HEAD:main
