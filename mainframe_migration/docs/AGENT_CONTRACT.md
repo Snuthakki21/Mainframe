@@ -7,6 +7,27 @@ the selected database. No model API is embedded. The local runner issues
 `agent_request.json`; the same agent session generates and registers the candidate
 then invokes validation. Contract tests do not constitute a live agent test.
 
+## Markdown process intake
+
+The operator supplies one `.md` process file, a local mainframe source repository,
+a process name, and available baseline evidence. Follow AGENTS.md and the migration
+skill. Use `init` only when the process configuration is absent; then use the same
+`run --config` command through discovery, candidate registration and validation.
+Read the format in MARKDOWN_INPUT.md. Legacy Excel input remains supported.
+
+Use `process_flow.json` and `discovery.json` from the current run to review the
+documented jobs, steps, processing sections, dataset bindings and source coverage.
+Descriptions supply intent, not executable behavior. `NONE` and omitted input/output
+columns must not become fabricated members, datasets, no-op implementations or
+expected outputs. Resolve evidence from JCL, programs, copybooks, DDL and approved
+answers. A documentation placeholder does not authorize dropping a source step.
+
+Establish every configured local dataset destination, layout and scheduler order
+from evidence. Keep unresolved source, destination and baseline questions together
+in the current `modernization_report.html`. A newly supplied `.md` file still uses
+the selected native target contract below; it does not reduce the candidate to a
+flow diagram or a set of prose summaries.
+
 ## Candidate layout
 
 All candidates include package.json, target.json, README.md, dependencies.json,

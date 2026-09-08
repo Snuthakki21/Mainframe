@@ -23,6 +23,10 @@ def request_body(cfg,paths,target,target_path,discovery,schema,answers,registry)
           'repository':str(paths['repo']),'jobs':discovery['jobs'],'schema':schema,'answers':answers,
           'reuse_candidates':reuse,'registration_root':str(paths['agents']/'targets-v2'),
           'requirement':'Preserve source behavior. No automatic repair. Generate one native file per job plus a complete selected-target runtime and DDL.'}
+    body['process_flow']=discovery.get('process_flow', {})
+    body['discovery_issues']=discovery.get('process_issues', discovery.get('issues', []))
+    body['input_files']={str(paths[name].resolve()):digest(paths[name].read_bytes()) if paths[name].is_file() else None
+                         for name in ('inventory','configuration','knowledge') if name in paths}
     # Previous target history is a hint, not a business-input change.
     key=fingerprint({k:v for k,v in body.items() if k!='reuse_candidates'})
     return {**body,'request_id':key}
@@ -33,6 +37,11 @@ def check_request(request):
     expected=fingerprint({k:v for k,v in request.items() if k not in {'request_id','reuse_candidates'}})
     if request.get('request_id')!=expected:raise Blocked('The agent request was modified. Run discovery again rather than editing the request.','AGENT_REQUEST_INTEGRITY')
     if changed(request['source_files']):raise Blocked('Source files changed after this agent request. Generate a new request.','AGENT_SOURCE_CHANGED')
+    for name, expected in request.get('input_files',{}).items():
+        path=Path(name)
+        actual=digest(path.read_bytes()) if path.is_file() else None
+        if actual!=expected or (expected is None and path.exists()):
+            raise Blocked('Process documentation, configuration, or knowledge changed after this agent request. Generate a new request.','AGENT_INPUT_CHANGED')
     if load_target(Path(request['target_path']))!=request['target']:raise Blocked('Target selection changed after the request. Do not register a stale target.','AGENT_TARGET_CHANGED')
 
 

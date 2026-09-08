@@ -1,0 +1,46 @@
+name: Verify mainframe framework
+
+on:
+  push:
+    paths:
+      - 'mainframe_migration/**'
+      - '.github/workflows/test-framework.yml'
+  pull_request:
+    paths:
+      - 'mainframe_migration/**'
+      - '.github/workflows/test-framework.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: mainframe_migration
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          # The package checks exact bytes, including Markdown on Windows.
+          fetch-depth: 1
+      - name: Verify package, tests, and all target selections
+        env:
+          PYTHONUTF8: '1'
+        run: python -S tools/verify_package.py --require-fresh
+      - name: Show verification receipt
+        if: always()
+        env:
+          PYTHONUTF8: '1'
+        run: python -c "from pathlib import Path; [print(p.read_text(encoding='utf-8')) for p in sorted(Path('evidence/package-check').glob('*/verification.json'))]"
+      - name: Show failed check logs
+        if: failure()
+        env:
+          PYTHONUTF8: '1'
+        run: python -c "from pathlib import Path; [print(p.name + '\n' + p.read_text(encoding='utf-8')[-16000:]) for p in sorted(Path('evidence/package-check').glob('*/*.txt'))]"

@@ -64,7 +64,7 @@ def main():
       'SAMPLE.TOTAL':('output','files/total.bin',28)}
     config={
       'schema_version':1,'generation_mode':'offline_subset','process':'synthetic_accounts','repository':'repository',
-      'inventory':'inventory.xlsx','sheet':'Process','source_format':'free',
+      'inventory':'process.md','source_format':'free',
       'collation':'cp037','execution_order':['JOB001','JOB002','JOB003','JOB004','JOB005'],
       'order_evidence':'Synthetic process specification; not an AutoSys export.',
       'ddl_sources':['ddl/ledger.sql'],'knowledge':'../knowledge/answers.json',

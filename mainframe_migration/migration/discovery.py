@@ -9,6 +9,7 @@ from __future__ import annotations
 from pathlib import Path
 import re
 from .common import Blocked, digest
+from .process_flow import documentation_only
 
 EXTENSIONS = {'.cbl','.cob','.cobol','.cpy','.copy','.jcl','.proc','.sql','.ddl','.cntl','.ctl'}
 UTILITIES = {'SORT','ICEMAN','IEBGENER','IEFBR14'}
@@ -163,19 +164,58 @@ def discover(repo: Path, rows: list[dict], config: dict) -> dict:
             job = parse_jcl(jcl.read_text(encoding='utf-8-sig'),str(jcl.relative_to(repo)))
             if job['name'] != name: raise Blocked(f'Inventory job {name} differs from JCL JOB {job["name"]}.', 'INVENTORY_CONFLICT',jcl.name)
             # Every JCL step must be visible. Missing inventory rows do not hide work.
-            expected = [(r['step'],r['program']) for r in selected]
+            expected = [(r['step'],r['program']) for r in selected if not documentation_only(r)]
             actual = [(s['name'],s['program']) for s in job['steps']]
             if expected != actual:
                 report['issues'].append(Blocked(f'Inventory steps {expected} differ from JCL steps {actual}. Confirm the process scope; no step will be silently dropped.', 'INVENTORY_CONFLICT',jcl.name).issue(name))
+            for row in selected:
+                # A documentation table can omit I/O columns. Compare only positive
+                # declarations, without treating DISP or a prose description as I/O.
+                if 'fields_present' not in row or documentation_only(row): continue
+                step = next((s for s in job['steps'] if s['name'] == row['step']), None)
+                if step is None: continue
+                actual_datasets = {dd['dsn'] for dd in step['dds'].values() if 'dsn' in dd}
+                for column, field in (('input', 'inputs'), ('output', 'outputs')):
+                    if column not in row['fields_present']: continue
+                    for dataset in row.get(field, []):
+                        if dataset.startswith('TABLE:'): continue  # DDL/SQL, not a JCL DD dataset.
+                        if dataset not in actual_datasets:
+                            location = f'{row.get("source", "inventory")}:{row["row"]}'
+                            report['issues'].append(Blocked(
+                                f'{name}/{row["step"]} documents {column} {dataset} at {location}, '
+                                f'but it is absent from that step\'s JCL DD datasets. '
+                                'Resolve the documentation/source difference; no binding will be invented.',
+                                'INVENTORY_DATASET_CONFLICT', location).issue(name))
             files = {jcl}
+            step_tables = {}
             for step in job['steps']:
-                if step['program'] in UTILITIES: continue
+                if step['program'] in UTILITIES:
+                    step_tables[step['name']] = set()
+                    continue
                 try:
                     program = resolve(index,step['program'],{'.cbl','.cob','.cobol'})
                     members, edges, problems = dependencies(program,index,config.get('source_format','fixed'))
                     files |= members; report['edges'] += edges
                     report['issues'] += [e.issue(name) for e in problems]
+                    if not problems:
+                        step_tables[step['name']] = {e['to'] for e in edges if e['kind'] == 'SQL_TABLE_CANDIDATE'}
                 except Blocked as e: report['issues'].append(e.issue(name))
+            for row in selected:
+                # A table declared by a different job's DDL is not evidence that
+                # this step accesses it. Static CALL/COPY dependencies count too.
+                if 'fields_present' not in row or row['step'] not in step_tables: continue
+                for column, field in (('input', 'inputs'), ('output', 'outputs')):
+                    if column not in row['fields_present']: continue
+                    for dataset in row.get(field, []):
+                        if not dataset.startswith('TABLE:'): continue
+                        table = dataset.removeprefix('TABLE:')
+                        if table not in step_tables[row['step']]:
+                            location = f'{row.get("source", "inventory")}:{row["row"]}'
+                            report['issues'].append(Blocked(
+                                f'{name}/{row["step"]} documents {column} table {table} at {location}, '
+                                'but that table is absent from the step\'s source-linked SQL references. '
+                                'Resolve the documentation/source difference; DDL alone does not establish step behavior.',
+                                'INVENTORY_DATABASE_CONFLICT', location).issue(name))
             for path in files:
                 report['sources'][str(path.relative_to(repo))] = digest(path.read_bytes())
             job['dependencies'] = sorted(str(p.relative_to(repo)) for p in files)

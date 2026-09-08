@@ -27,10 +27,45 @@ matching runtime/platform packages, and a resolved transitive lock.
 ## Process evidence
 
 The existing schema_version 1 process structure is retained: repository,
-inventory, sheet, source_format, collation, execution_order, order_evidence,
+inventory, source_format, collation, execution_order, order_evidence,
 ddl_sources, datasets, cases, baseline, knowledge, output, cache, agent_artifacts.
-Dataset paths are portable relative paths with forward slashes; use explicit
-encodings, fixed record lengths and input/output/intermediate roles.
+`inventory` now normally points to a UTF-8 `.md` file. `sheet` is only used for
+legacy `.xlsx` input and can be omitted for Markdown. Relative configuration paths
+are resolved from the directory containing `process.json`.
+
+For example, a configuration at `processes/PAYMENTS/process.json` can contain:
+
+```json
+{
+  "inventory": "PAYMENTS.md",
+  "repository": "../../../mainframe-source",
+  "output": "../../output"
+}
+```
+
+This is a path-settings excerpt, not a complete process configuration. Use
+`modernize.py init --process PAYMENTS --repository <local-source-folder> --inventory <process.md> --config <process.json>`
+to create the initial configuration and run discovery. Optional `--output` chooses
+the persisted output root; optional `--target` selects a persisted target profile.
+The normal later command remains `modernize.py run --config <process.json>`.
+Initialization saves resolved absolute local paths. Initialize after placing the
+framework beside the source repository on the work machine; update those paths
+if the folders are relocated. Handwritten relative paths remain supported, as in
+the portable shipped sample. If `output` is absent in a handwritten configuration,
+it defaults to an `output` folder beside that configuration.
+
+`execution_order` names every scoped job once. Inventory order seeds the initial
+list for discovery; `order_evidence` must establish scheduler order before it is
+accepted for execution. Headings and processing sections are documentation, not
+new scheduling or branching rules.
+
+Dataset paths are portable relative paths with forward slashes. Use explicit
+encodings, fixed record lengths and input/output/intermediate roles. Input paths
+are relative to each case's `path`; output and intermediate paths are relative to
+that run's `verification/cases/<case-name>/` folder. `expected_files` paths are
+relative to the case evidence directory. Destination names in the Markdown do not
+create a filesystem binding or authorize a transfer; configure `datasets` using
+source-backed names, layouts and local paths. See MARKDOWN_INPUT.md for an example.
 
 The default generation_mode is `agent`. `offline_subset` is intentionally
 restricted to synthetic baseline fixtures. `agent_generation_version` separates
@@ -41,6 +76,11 @@ Baseline manifests identify input bytes, expected bytes/database snapshots, and
 initial database scripts. Mainframe evidence also needs run ID, source revision
 and runtime context. No baseline is synthesized from generated outputs.
 
-The Excel columns remain A job, B step, C program, D inputs, E outputs. The
-workbook is a seed, not authoritative evidence of complete dependencies or runtime
-order. Current loader and source-front-end limits are in SUPPORT_AND_LIMITS.md.
+Markdown supports `# Job: JOBNAME` headings and pipe tables with `Step`, `Program`
+and optional `Input`, `Output`, `Description` columns, or tables with a `Job` column.
+`NONE` is an absence marker, not a dataset/program to fetch. Multiple dataset names
+can be separated by semicolons or `<br>`. See MARKDOWN_INPUT.md for the full contract.
+
+Legacy Excel columns remain A job, B step, C program, D inputs, E outputs. Neither
+input format proves complete dependencies or runtime order. Current loader and
+source-front-end limits are in SUPPORT_AND_LIMITS.md.

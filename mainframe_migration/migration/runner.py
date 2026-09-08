@@ -26,6 +26,7 @@ from .common import Blocked,atomic_write,changed,digest,fingerprint,inside,read_
 from .compiler import compile_job,translate_ddl
 from .discovery import discover
 from .inventory import read_inventory
+from .process_flow import normalize_flow
 from .report import write_report
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -231,11 +232,14 @@ def run(config_path: Path,output_override: Path | None = None,discover_only: boo
             problem=exc if isinstance(exc,Blocked) else Blocked(str(exc),'TEST_EVIDENCE')
             result['issues'].append(problem.issue())
         if not cfg['order_evidence']:
-            result['issues'].append(Blocked('Provide the evidence for inter-job execution order (scheduler export or confirmed sequence). Excel order is used for discovery only, not assumed to be executable order.','PROCESS_ORDER').issue())
+            result['issues'].append(Blocked('Provide the evidence for inter-job execution order (scheduler export or confirmed sequence). Document order is used for discovery only, not assumed to be executable order.','PROCESS_ORDER').issue())
         answers,_=knowledge(paths['knowledge'],cfg['process']);result['metrics']['knowledge_answers']=len(answers)
-        stage('DISCOVER','Reading Excel and following JCL, COPY, CALL, and database references.')
+        stage('DISCOVER','Reading the process inventory and following JCL, COPY, CALL, and database references.')
         rows=read_inventory(paths['inventory'],cfg.get('sheet','Process'))
         discovered=discover(paths['repo'],rows,cfg)
+        result['process_flow']=normalize_flow(rows,cfg,paths['inventory'],discovered)
+        result['process_flow_file']=str(folder/'process_flow.json')
+        write_json(folder/'process_flow.json',result['process_flow'])
         result['issues']+=discovered['issues']
         write_json(folder/'discovery.json',{k:v for k,v in discovered.items() if k!='index'})
         names=[j['name'] for j in discovered['jobs']]
@@ -261,6 +265,9 @@ def run(config_path: Path,output_override: Path | None = None,discover_only: boo
             schema.update(part);ddl_parts.append(sql);ddl_paths.append(path)
             discovered['sources'][str(path.relative_to(paths['repo']))]=digest(path.read_bytes())
         local_sql='\n'.join(ddl_parts) if ddl_parts else '-- This process has no configured database tables.\n'
+        discovered['schema']=schema
+        result['process_flow']=normalize_flow(rows,cfg,paths['inventory'],discovered)
+        write_json(folder/'process_flow.json',result['process_flow'])
         for edge in discovered['edges']:
             if edge['kind']=='SQL_TABLE_CANDIDATE' and edge['to'] not in schema:
                 result['issues'].append(Blocked(f'{edge["from"]} references database object {edge["to"]}. Provide its authoritative DDL and initial state; a schema will not be invented.','MISSING_DDL',edge['from']).issue())
@@ -311,7 +318,7 @@ def run(config_path: Path,output_override: Path | None = None,discover_only: boo
         stage('GENERATE',f'{result["metrics"]["jobs_generated"]} job files available; {len(result["issues"])} unresolved exceptions. No repair loop is run.')
         request={'schema_version':1,'process':cfg['process'],'config':str(config_path.resolve()),'repository':str(paths['repo']),
           'artifact_store':str(paths['agents']),'config_sha256':digest(config_path.read_bytes()),'tools_fingerprint':toolhash,'source_hashes':discovered['sources'],
-          'approved_knowledge':answers,'tasks':tasks,'rules':['Preserve source behavior.','Never edit source/baselines/comparison rules.','After validation, do not repair generated code.','Do not put business input records in the AI prompt.']}
+          'approved_knowledge':answers,'process_flow':result['process_flow'],'tasks':tasks,'rules':['Preserve source behavior.','Never edit source/baselines/comparison rules.','After validation, do not repair generated code.','Do not put business input records in the AI prompt.']}
         write_json(folder/'agent_request.json',request)
         if discovered['issues'] or result['issues'] or discover_only:
             result['status']='DISCOVERED' if discover_only and not result['issues'] else 'BLOCKED'

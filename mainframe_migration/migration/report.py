@@ -26,6 +26,15 @@ def write_report(folder: Path, result: dict) -> Path:
     blocks+=['<h2>2. Job and source coverage</h2>',table(['Job','Generation route','Result','Source statements mapped','Artifact'],[(j['name'],j.get('mode','not generated'),j.get('status','blocked'),j.get('statement_count','not measured'),j.get('artifact','none')) for j in result.get('jobs',[])])]
     blocks+=['<p>Statement counts cover only the parsed/agent-mapped source. They are not a claim of full business-rule coverage. Unresolved dependencies remain blockers. Utility steps are counted as steps, not COBOL statements.</p>']
     blocks+=['<p>Discovered source members: '+e(metrics.get('source_members',0))+'. JCL steps: '+e(metrics.get('steps',0))+'. Observed translated statements: '+e(metrics.get('statements_observed',0))+' / '+e(metrics.get('statements_mapped',0))+'. Unvisited statements remain untested.</p>']
+    flow=result.get('process_flow',{})
+    if flow:
+        blocks+=['<h2>Documented process flow</h2><p>'+e(flow['authority'])+'</p>',
+          table(['Job / step','Program','Section','Description','Source line'],[
+            (r['job']+'/'+r['step'],r['program'],r.get('section',''),r.get('description',''),
+             str(r.get('source',''))+':'+str(r['row'])) for r in flow['rows']]),
+          '<h2>Dataset destinations</h2>',table(['Dataset','Configured role','Local path','Status'],[
+            (b['dataset'],b.get('configured_role') or 'Unresolved',b.get('path') or 'Unresolved',b['destination_status'])
+            for b in flow['dataset_bindings']])]
     blocks+=['<h2>3. Local execution and comparisons</h2>',table(['Scenario','Result','File checks','Database checks','Detail'],[(c['name'],c.get('status','not run'),c.get('file_passed',0).__str__()+' / '+str(c.get('file_total',0)),str(c.get('database_passed',0))+' / '+str(c.get('database_total',0)),c.get('detail','')) for c in result.get('cases',[])])]
     comparisons=[(c['name'],d.get('kind',''),d.get('name',''),d.get('status',''),d.get('detail','')) for c in result.get('cases',[]) for d in c.get('comparisons',[])]
     if comparisons:blocks+=['<details><summary>Open individual file and table comparison results</summary>',table(['Scenario','Kind','Object','Result','Evidence'],comparisons),'</details>']
@@ -39,7 +48,7 @@ def write_report(folder: Path, result: dict) -> Path:
     links=[]
     for p in sorted((folder/'code').glob('*.py')) if (folder/'code').exists() else []:
         rel=p.relative_to(folder).as_posix();links.append(f'<a href="{quote(rel)}">{e(p.name)}</a>')
-    for rel in ('ddl/local.sql','ddl/logical_schema.json','discovery.json','result.json','agent_request.json'):
+    for rel in ('ddl/local.sql','ddl/logical_schema.json','process_flow.json','discovery.json','result.json','agent_request.json'):
         if (folder/rel).exists():links.append(f'<a href="{quote(rel)}">{e(rel)}</a>')
     blocks+=['<h2>8. Artifacts and detailed evidence</h2><p>'+' &nbsp; | &nbsp; '.join(links)+'</p>',
       '<h2>9. What happened, in order</h2>',table(['Stage','Detail'],[(s['stage'],s['detail']) for s in result.get('stages',[])])]

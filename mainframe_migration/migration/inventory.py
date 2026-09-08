@@ -1,4 +1,4 @@
-"""Read the user's five-column Excel inventory without installing Excel or packages.
+"""Read Markdown process documentation or a legacy five-column Excel inventory.
 
 Only cell values are accepted. Formulas and ambiguous job/step rows are rejected,
 not guessed. A blank Job cell repeats the last job, matching common inventories.
@@ -24,8 +24,12 @@ def _xml(z: zipfile.ZipFile, name: str) -> ET.Element:
 
 def read_inventory(path: Path, sheet: str = 'Process') -> list[dict]:
     """Return the job, step, program, input, and output stated in each inventory row."""
+    path = Path(path)
+    if path.suffix.lower() in {'.md', '.markdown'}:
+        from .markdown_inventory import read_markdown_inventory
+        return read_markdown_inventory(path)
     if path.suffix.lower() != '.xlsx':
-        raise Blocked('Save the inventory as .xlsx with Job, Step, Program, Input, Output in columns A–E.', 'INVENTORY')
+        raise Blocked('Supply a .md or .markdown process document with Job headings and Step/Program tables, or a legacy .xlsx inventory with Job, Step, Program, Input, Output in columns A–E.', 'INVENTORY', str(path))
     try:
         with zipfile.ZipFile(path) as z:
             if sum(i.file_size for i in z.infolist()) > 50_000_000:

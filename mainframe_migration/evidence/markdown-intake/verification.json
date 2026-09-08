@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "upstream_base_commit": "acd53ef4e15daebdc99ff41f9f57f9573addd50a",
+  "environment": {
+    "os": "Linux-6.18.35-x86_64-with-glibc2.39",
+    "python": "3.12.13",
+    "sqlite": "3.53.1"
+  },
+  "tests": {
+    "command": "python -S modernize.py self-test",
+    "run": 138,
+    "passed": 137,
+    "skipped": 1,
+    "failures": 0,
+    "errors": 0,
+    "skip_reason": "Native Java mutation check requires an installed JDK"
+  },
+  "default_target": {
+    "language": "python",
+    "database": "sqlite"
+  },
+  "workstation_simulation": {
+    "tests": 3,
+    "passed": 3,
+    "pip_installed": false,
+    "third_party_packages_required": false,
+    "sibling_folders_with_spaces": true,
+    "unrelated_working_directory": true,
+    "relative_config_relocation": true,
+    "absolute_init_paths": true,
+    "repeat_reuses_code_and_preserves_prior_evidence": true,
+    "missing_inputs_and_bindings_block_without_repairs": true
+  },
+  "matrix_assertions": {
+    "nine_targets_generated": true,
+    "no_executed_target_test_failed": true,
+    "source_and_baseline_unchanged": true,
+    "switch_back_reuses_original_artifact": true,
+    "switch_back_reuses_five_jobs": true
+  },
+  "targets": [
+    {
+      "target": "python-sqlite",
+      "status": "SYNTHETIC_TARGET_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "PASSED",
+      "native_database": "PASSED",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 0,
+      "job_files_created": 5,
+      "job_files_reused": 0,
+      "files_passed": 18,
+      "file_checks": 18,
+      "database_or_trace_passed": 3,
+      "return_codes_passed": 15
+    },
+    {
+      "target": "python-oracle",
+      "status": "GENERATED_NOT_FULLY_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "PASSED",
+      "native_database": "NOT_RUN_REMOTE",
+      "contract_execution": "PASSED",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 18,
+      "file_checks": 18,
+      "database_or_trace_passed": 3,
+      "return_codes_passed": 15
+    },
+    {
+      "target": "python-bigquery",
+      "status": "GENERATED_WITH_CAPABILITY_BLOCKERS",
+      "generation": "PASSED",
+      "compilation": "PASSED",
+      "native_database": "NOT_RUN_REMOTE",
+      "contract_execution": "PASSED",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 18,
+      "file_checks": 18,
+      "database_or_trace_passed": 3,
+      "return_codes_passed": 15
+    },
+    {
+      "target": "java-sqlite",
+      "status": "GENERATED_NOT_FULLY_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 5,
+      "job_files_reused": 0,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    },
+    {
+      "target": "java-oracle",
+      "status": "GENERATED_NOT_FULLY_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    },
+    {
+      "target": "java-bigquery",
+      "status": "GENERATED_WITH_CAPABILITY_BLOCKERS",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    },
+    {
+      "target": "dotnet-sqlite",
+      "status": "GENERATED_NOT_FULLY_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 5,
+      "job_files_reused": 0,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    },
+    {
+      "target": "dotnet-oracle",
+      "status": "GENERATED_NOT_FULLY_VALIDATED",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    },
+    {
+      "target": "dotnet-bigquery",
+      "status": "GENERATED_WITH_CAPABILITY_BLOCKERS",
+      "generation": "PASSED",
+      "compilation": "NOT_AVAILABLE",
+      "native_database": "NOT_RUN_NO_RUNTIME",
+      "contract_execution": "NOT_RUN",
+      "models_reused": 5,
+      "job_files_created": 0,
+      "job_files_reused": 5,
+      "files_passed": 0,
+      "file_checks": 0,
+      "database_or_trace_passed": 0,
+      "return_codes_passed": 0
+    }
+  ],
+  "limits": [
+    "This receipt records Linux execution. Windows CI is configured separately; no Windows success is asserted here.",
+    "No real mainframe baseline, live IDE agent, Oracle, or BigQuery was executed.",
+    "Missing Java and .NET SDKs are NOT_AVAILABLE; generation is not native compilation."
+  ]
+}

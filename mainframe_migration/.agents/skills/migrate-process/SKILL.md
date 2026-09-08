@@ -5,9 +5,14 @@ description: Discover and migrate a source-linked mainframe process to the indep
 
 # One agent-operated migration or retargeting
 
-The operator supplies a repository path, Excel inventory, process name, and
+The operator supplies a repository path, Markdown process file, process name, and
 available baseline evidence. Run the internal steps yourself. Do not ask the
 operator to drive separate discover/convert/run/compare commands.
+
+Read docs/MARKDOWN_INPUT.md for the intake contract. Accept the operator's existing
+Team Composer conversion directly; conversion from Excel is a one-time manual
+activity outside this framework. Do not require the original workbook or run a
+conversion service. Existing .xlsx configurations remain compatible.
 
 ## Read and discover
 
@@ -21,6 +26,16 @@ file layouts, bindings and ordering using the repository evidence. Run:
 Read the resulting consolidated report and agent_request.json. Investigate all
 safe dependency paths before collecting one current list of plain-English gaps.
 A new supplied dependency can reveal more questions; do not promise omniscience.
+
+Review the saved process_flow.json for all documented jobs, sections, steps,
+descriptions and dataset names. Preserve their source line references. A NONE
+program is a documentation marker, not an executable program. Description-only
+tables describe scope; they do not supply missing COBOL logic or dataset bindings.
+Use JCL and source evidence to confirm execution order, DD bindings and omissions.
+Map each required dataset to an explicit configured path and record unresolved
+destinations as questions. Markdown row order alone is not scheduler evidence.
+Keep target choices in target.json and place the process's reports and artifacts
+under its configured output root; do not invent external delivery destinations.
 
 ## Generate or retarget
 

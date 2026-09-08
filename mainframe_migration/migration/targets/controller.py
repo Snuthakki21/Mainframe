@@ -11,6 +11,7 @@ import copy,html,json,os,platform,re,shutil,sys,uuid
 from migration.common import Blocked,atomic_write,digest,fingerprint,inside,read_json,write_json,snapshot,changed
 from migration.discovery import discover
 from migration.inventory import read_inventory
+from migration.process_flow import normalize_flow
 from migration.runner import load_config,knowledge,_baseline_files,_check_baseline,_path
 from .config import load_target,target_identity
 from .model import obtain,behavior_key
@@ -86,6 +87,23 @@ def write_report(folder,result):
     target=result.get('target',{});metrics=result.get('metrics',{})
     body='<h1>Modernization & retargeting report</h1><p class="strap">'+esc(result.get('process','Unknown process'))+' · '+esc(target.get('language','?'))+' / '+esc(target.get('database','?'))+'</p>'
     body+='<h2>'+esc(result['status'])+'</h2><p>'+esc(result.get('summary',''))+'</p>'
+    flow=result.get('process_flow')
+    if flow:
+        body+='<h2>Documented process flow</h2><p>'+esc(flow['authority'])+'</p>'
+        body+='<p>Input: '+esc(flow['inventory']['path'])+'. Configured job order: '+esc(', '.join(flow['execution_order']))+'. Evidence: '+esc(flow['order_evidence'] or 'UNRESOLVED')+'</p>'
+        body+=table(['Job / step','Program / kind','Section / description','Documented input','Documented output','Source location'],[
+            (r['job']+' / '+r['step'],r['program']+' / '+r['kind'],r['section']+' / '+r['description']+
+             (' / '+ '; '.join(str(k)+': '+str(v) for k,v in r['extra_fields'].items()) if r.get('extra_fields') else ''),
+             '; '.join(r['inputs']) or ('NONE' if 'input' in r['fields_present'] else 'Not documented'),
+             '; '.join(r['outputs']) or ('NONE' if 'output' in r['fields_present'] else 'Not documented'),
+             str(r['source'])+':'+str(r['row'])) for r in flow['rows']])
+        body+='<h2>Dataset destinations</h2><p>Paths are the configured paths used inside each isolated test run. UNRESOLVED requires an explicit binding. Configured role is a process lifecycle role, not an inferred DD direction.</p>'
+        body+=table(['Dataset','Configured role','Configured path','Destination status','Documented outputs at'],[
+            (d['dataset'],d['configured_role'] or 'UNRESOLVED',d['path'] or 'UNRESOLVED',d['destination_status'],
+             ', '.join(r['job']+'/'+r['step'] for r in d['documented_outputs']) or 'Not documented') for d in flow['dataset_bindings']])
+        if flow['database_objects']:
+            body+='<h2>Documented database objects</h2>'+table(['Table','Source definition','Selected database'],[
+                (obj['name'],obj['schema_status'],target.get('database','UNRESOLVED')) for obj in flow['database_objects']])
     body+='<h2>What was reused and what changed</h2>'+table(['Measure','Observed'],metrics.items())
     body+='<p>Previous target: '+esc(result.get('previous_target','none'))+'. '+esc(result.get('retarget_reason',''))+'</p>'
     body+='<h2>Generated jobs</h2>'+table(['Job','Source model','Language code','Model fingerprint'],[(j['job'],j['model_status'],j['code_status'],j['model_key'][:16]) for j in result.get('jobs',[])])
@@ -98,7 +116,7 @@ def write_report(folder,result):
     body+=table(['Scenario','Mode','Files','Database / operation checks','Return codes','Outcome'],[(c['name'],c['mode'],str(c.get('file_passed',0))+'/'+str(c.get('file_total',0)),str(c.get('database_passed',0))+'/'+str(c.get('database_total',0)),str(c.get('rc_passed',0))+'/'+str(c.get('rc_total',0)),c['status']) for c in cases])
     body+='<h2>Questions and blockers</h2>'+table(['Owner','Code','Question / finding'],[(x.get('owner','Migration engineer'),x.get('code',''),x.get('question',x.get('message',''))) for x in result.get('issues',[])])
     body+='<h2>Stages</h2>'+table(['Stage','What happened'],[(s['stage'],s['detail']) for s in result.get('stages',[])])
-    body+='<h2>Artifacts and evidence</h2>'+table(['Location','Value'],[(k,result.get(k,'')) for k in ('artifact_folder','artifact_id','run_folder','registry_file','environment')])
+    body+='<h2>Artifacts and evidence</h2>'+table(['Location','Value'],[(k,result.get(k,'')) for k in ('artifact_folder','artifact_id','run_folder','process_flow_file','registry_file','environment')])
     body+='<h2>Boundaries</h2><p>'+esc('This is a bounded source workbench, not a universal COBOL/JCL compiler. Synthetic expectations are not IBM mainframe outputs. Contract recordings are not live Oracle, BigQuery, or native-driver tests. A generated or compiled target is not production validated. No application rule was repaired. This review was performed in this assistant session, not by an independent third-party reviewer.')+'</p>'
     page='<!doctype html><html><head><meta charset="utf-8"><title>Modernization report</title><style>body{font:16px/1.5 Segoe UI,Arial,sans-serif;color:#182b3a;max-width:1200px;margin:32px auto;padding:0 24px}h1{font-size:34px}h2{margin-top:32px;color:#164f67}.strap{font-size:20px;color:#586b76}table{width:100%;border-collapse:collapse;margin:16px 0;table-layout:fixed}th,td{text-align:left;padding:10px;vertical-align:top;border-bottom:1px solid #d9e4e9;overflow-wrap:anywhere}th{background:#eaf2f5}p{max-width:1050px}</style></head><body>'+body+'</body></html>'
     atomic_write(folder/'modernization_report.html',page);write_json(folder/'result.json',result)
@@ -114,6 +132,7 @@ def run(config_path: Path,target_path: Path|None=None,output_override: Path|None
         print('['+name+'] '+text,flush=True);result['stages'].append({'stage':name,'detail':text});write_report(folder,result)
     try:
         cfg,paths=load_config(config_path)
+        paths['configuration']=config_path
         if {'target','language','database','target_database','target_language'}&set(cfg):raise Blocked('Put target choices only in target.json, not in the process configuration.','TARGET_CONFIG')
         if output_override is not None:paths['output']=Path(output_override).resolve()
         target_path=Path(target_path).resolve() if target_path is not None else (_path(paths['base'],cfg['target_file']) if cfg.get('target_file') else ROOT/'target.json')
@@ -136,12 +155,29 @@ def run(config_path: Path,target_path: Path|None=None,output_override: Path|None
         elif previous and previous['language']!=target['language']:result['retarget_reason']='Language changed: reuse eligible behavior models; generate native language artifacts and require new runtime validation.'
         elif previous:result['retarget_reason']='Target is unchanged: reuse only intact fingerprint matches and rerun available validation.'
         else:result['retarget_reason']='First source-linked v2 generation. Historical v1 deliveries, when present, are recorded separately.'
-        stage('DISCOVER','Reading the Excel/JCL sources and authoritative definitions; existing targets are not modified.')
-        rows=read_inventory(paths['inventory'],cfg.get('sheet','Process'));found=discover(paths['repo'],rows,cfg)
+        stage('DISCOVER','Reading the process document, JCL sources, and authoritative definitions; existing targets are not modified.')
+        rows=read_inventory(paths['inventory'],cfg.get('sheet','Process'))
+        result['process_flow_file']=str(folder/'process_flow.json')
+        result['process_flow']=normalize_flow(rows,cfg,paths['inventory'])
+        write_json(folder/'process_flow.json',result['process_flow'])
+        found=discover(paths['repo'],rows,cfg)
+        result['process_flow']=normalize_flow(rows,cfg,paths['inventory'],found)
+        found['process_flow']=result['process_flow']
+        write_json(folder/'process_flow.json',result['process_flow'])
         result['issues']+=found['issues'];result['metrics']['jobs_discovered']=len(set(r['job'] for r in rows))
         if set(cfg['execution_order'])!=set(r['job'] for r in rows):raise Blocked('Execution order must name every inventory job exactly once.','PROCESS_ORDER')
-        if not cfg.get('order_evidence'):result['issues'].append(Blocked('Provide evidence for cross-job execution order; spreadsheet row order is not a scheduler rule.','PROCESS_ORDER').issue())
+        if not cfg.get('order_evidence'):result['issues'].append(Blocked('Provide evidence for cross-job execution order; document row order is not a scheduler rule.','PROCESS_ORDER').issue())
+        for binding in result['process_flow']['dataset_bindings']:
+            if binding['destination_status']=='UNRESOLVED' and (binding['documented_inputs'] or binding['documented_outputs']):
+                result['issues'].append(Blocked('Documented dataset has no configured destination: '+binding['dataset']+'. Supply its explicit dataset binding.','DATASET_BINDING').issue())
         models=[];codes={};issue_count=len(found['issues']);schema=_schema(cfg,paths,found);result['issues']+=found['issues'][issue_count:];answers,_=knowledge(paths['knowledge'],cfg['process'])
+        found['schema']=schema
+        result['process_flow']=normalize_flow(rows,cfg,paths['inventory'],found)
+        found['process_flow']=result['process_flow']
+        write_json(folder/'process_flow.json',result['process_flow'])
+        for obj in result['process_flow']['database_objects']:
+            if obj['schema_status']=='UNRESOLVED':
+                result['issues'].append(Blocked('Documented table has no authoritative DDL: '+obj['name']+'. Supply its source definition.','MISSING_DDL').issue())
         for job in found['jobs']:
             for s in job['steps']:
                 for dd in s['dds'].values():
@@ -161,6 +197,7 @@ def run(config_path: Path,target_path: Path|None=None,output_override: Path|None
             if exc.code=='BASELINE_INTEGRITY':raise
         if cfg.get('generation_mode','agent')=='agent':
             from .agent import request_body,load_registered
+            found['process_issues']=list(result['issues'])
             request=request_body(cfg,paths,target,target_path,found,schema,answers,registry)
             write_json(folder/'agent_request.json',request)
             registered=load_registered(request)

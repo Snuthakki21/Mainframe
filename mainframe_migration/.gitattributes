@@ -1,0 +1,3 @@
+# Package integrity checks use exact shipped bytes on Windows and Linux.
+# Preserve each committed file's line endings, including the Windows launcher.
+* -text

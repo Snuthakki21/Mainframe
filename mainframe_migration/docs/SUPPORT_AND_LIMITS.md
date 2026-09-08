@@ -2,6 +2,14 @@
 
 ## Implemented in v2
 
+UTF-8 Markdown process inventories with job headings, optional processing sections,
+step/program tables containing input/output names and/or descriptions, and a
+`Job`-column table alternative. `NONE` markers and multiple datasets separated by
+semicolons or `<br>` are recognized. Parsed process flow and configured local
+destinations are retained in `process_flow.json`. The existing `.xlsx` reader is
+retained for compatibility. The sample now uses `sample/process.md` with the same
+five jobs and six steps as its original workbook.
+
 Independent Python/C#/Java and SQLite/Oracle/BigQuery configuration; source-linked
 behavior models for the inherited synthetic subset; native language emitters;
 separate database adapters and source-derived target DDL; immutable artifacts;
@@ -26,6 +34,14 @@ not driver/database semantics. The delivered exact-ZIP receipt is the authority
 for measured test counts and actual environments.
 
 ## Not implemented or not validated
+
+Automatic Team Composer conversion, OCR intake, or execution of instructions
+embedded in a Markdown document. Save actual Markdown text after the one-time
+conversion; screenshots show the format but are not executable process inputs.
+Narrative descriptions do not supply missing program logic, file layouts,
+authoritative output bytes, scheduler dependencies or production destinations.
+Incomplete documentation is discovered and reported; accepting its syntax is not
+a claim that the whole mainframe process can execute.
 
 A universal Enterprise COBOL/JCL parser; complete PROC/symbol/conditional handling;
 CICS/IMS/VSAM/GDG behavior; packed/binary/variable formats; all compiler settings;

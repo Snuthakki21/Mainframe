@@ -2,8 +2,7 @@
   "schema_version": 1,
   "process": "synthetic_accounts",
   "repository": "repository",
-  "inventory": "inventory.xlsx",
-  "sheet": "Process",
+  "inventory": "process.md",
   "source_format": "free",
   "collation": "cp037",
   "execution_order": [

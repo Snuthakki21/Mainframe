@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 import platform
+import re
 import sqlite3
 import sys
 import unittest
@@ -32,10 +33,12 @@ def main(argv=None) -> int:
     matrixp.add_argument('--output',type=Path,required=True)
     initp=subs.add_parser('init',help='Create a real-process configuration and immediately discover missing evidence.')
     initp.add_argument('--repository',type=Path,required=True)
-    initp.add_argument('--inventory',type=Path,required=True)
+    initp.add_argument('--inventory',type=Path,required=True,help='Process Markdown (.md/.markdown); legacy .xlsx is also accepted.')
     initp.add_argument('--process',required=True)
     initp.add_argument('--config',type=Path,required=True)
-    initp.add_argument('--sheet',default='Process')
+    initp.add_argument('--sheet',default='Process',help='Legacy Excel worksheet name; ignored for Markdown.')
+    initp.add_argument('--output',type=Path,help='Persist the destination root for this process and its future runs.')
+    initp.add_argument('--target',type=Path,help='Persist the target.json path; language/database stay in that file.')
     initp.add_argument('--source-format',choices=['fixed','free'],default='fixed')
     subs.add_parser('doctor',help='Show the local Python and SQLite environment; do not install anything.')
     subs.add_parser('self-test',help='Run the shipped unit, integration, and adversarial tests.')
@@ -75,14 +78,23 @@ def main(argv=None) -> int:
         if args.config.exists():
             print('BLOCKED: configuration already exists; it will not be overwritten.');return 2
         try:
+            if not re.fullmatch(r'[A-Za-z0-9_-]{1,64}',args.process):
+                raise Blocked('Use a process name containing only letters, numbers, underscore, or hyphen.','CONFIG')
+            if not args.repository.is_dir():
+                raise Blocked('The local source repository folder is missing.','CONFIG')
+            if args.target is not None:
+                from migration.targets.config import load_target
+                load_target(args.target)
             rows=read_inventory(args.inventory,args.sheet)
             order=list(dict.fromkeys(r['job'] for r in rows))
             cfg={'schema_version':1,'generation_mode':'agent','process':args.process,
                 'repository':str(args.repository.resolve()),'inventory':str(args.inventory.resolve()),
-                'sheet':args.sheet,'source_format':args.source_format,'datasets':{},'cases':[],
+                'source_format':args.source_format,'datasets':{},'cases':[],
                 'execution_order':order,'order_evidence':'','baseline':{'kind':'mainframe'},
-                'knowledge':str(ROOT/'knowledge/answers.json'),'output':str(ROOT/'output'),
+                'knowledge':str(ROOT/'knowledge/answers.json'),'output':str((args.output or ROOT/'output').resolve()),
                 'cache':str(ROOT/'.migration/cache'),'agent_artifacts':str(ROOT/'agent_artifacts')}
+            if args.inventory.suffix.lower()=='.xlsx':cfg['sheet']=args.sheet
+            if args.target is not None:cfg['target_file']=str(args.target.resolve())
             write_json(args.config,cfg)
             result=run(args.config);print('STATUS:',result['status']);return 2 if result['status']=='BLOCKED' else 0
         except (Blocked,OSError,ValueError) as exc:print('BLOCKED:',exc);return 2
