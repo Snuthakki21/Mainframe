@@ -191,7 +191,9 @@ class WorkstationSetupTests(unittest.TestCase):
         self.assertEqual(relocated['metrics']['models_reused'], 5)
         self.assertEqual(relocated['metrics']['job_files_reused'], 5)
         self.assertEqual(relocated['artifact_id'], second['artifact_id'])
-        self.assertTrue(Path(relocated['run_folder']).is_relative_to(moved))
+        # Windows temporary paths may use an 8.3 alias (RUNNER~1) while the
+        # controller records the same directory with its resolved long name.
+        self.assertTrue(Path(relocated['run_folder']).resolve().is_relative_to(moved.resolve()))
         self.assertEqual(hashes(self.source), source_before)
         self.assertEqual(hashes(self.config.parent / 'cases'), baselines_before)
         self.assertEqual((self.config.parent / 'baseline_manifest.json').read_bytes(), manifest_before)

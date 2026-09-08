@@ -26,4 +26,4 @@
 - [x] Update modernize.py initialization to accept Markdown, persist optional output and target paths, and reject invalid process names before writing configuration. Test through the actual CLI entrypoint.
 - [x] Switch the executable sample to equivalent Markdown, add a labeled screenshot-format example, and update operator/agent instructions and the migration skill.
 - [x] Run parser/CLI tests, the complete existing suites, the Markdown sample, and all nine target selections. Retain measured evidence and refresh the shipped package manifest after final changes.
-- [ ] Review the final diff and publish a branch whose parent is the inspected upstream commit. Verify the remote tree against the tested local content.
+- [x] Review the final diff and publish a branch whose parent is the inspected upstream commit. Verify the remote tree against the tested local content.

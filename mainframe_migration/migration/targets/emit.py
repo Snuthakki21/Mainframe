@@ -130,11 +130,11 @@ def emit_job(model,language):
 
 def emit_python(model):
     """Reuse the proved source emitter while removing its SQLite-specific import path."""
-    lines=['"""'+model['job']+' — migrated source job.',
+    purpose='\n'.join([model['job']+' — migrated source job.',
            'Run every JCL step in order and preserve the original business behavior.',
            'Inputs/outputs are the source DD bindings; database access is selected separately.',
-           'Source: '+model['source']+'\n"""',
-           'from decimal import Decimal, localcontext','from _runtime import Fields, relation','']
+           'Source: '+model['source']])
+    lines=[repr(purpose),'from decimal import Decimal, localcontext','from _runtime import Fields, relation','']
     for p in model['programs']:lines+=emit_program(p)
     for step in model['steps']:
         lines += ['def step_'+name(step['name'])+'(ctx):',

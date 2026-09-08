@@ -74,6 +74,10 @@ test_prose_does_not_silently_drop_a_following_step (test_markdown_inventory.Mark
 test_recognized_empty_table_is_blocked (test_markdown_inventory.MarkdownInventoryContract.test_recognized_empty_table_is_blocked) ... ok
 test_table_without_job_context_is_blocked (test_markdown_inventory.MarkdownInventoryContract.test_table_without_job_context_is_blocked) ... ok
 test_unknown_documentation_columns_are_retained (test_markdown_inventory.MarkdownInventoryContract.test_unknown_documentation_columns_are_retained) ... ok
+test_discovered_sources_remain_portable_repository_relative_paths (test_source_paths.SourcePathTests.test_discovered_sources_remain_portable_repository_relative_paths) ... ok
+test_legacy_module_docstring_preserves_windows_source_path (test_source_paths.SourcePathTests.test_legacy_module_docstring_preserves_windows_source_path) ... ok
+test_program_docstring_preserves_backslashes_and_quotes (test_source_paths.SourcePathTests.test_program_docstring_preserves_backslashes_and_quotes) ... ok
+test_target_module_docstring_preserves_windows_source_path (test_source_paths.SourcePathTests.test_target_module_docstring_preserves_windows_source_path) ... ok
 test_bad_operator_inputs_block_clearly_without_generating_a_partial_process (test_workstation_setup.WorkstationSetupTests.test_bad_operator_inputs_block_clearly_without_generating_a_partial_process) ... ok
 test_init_accepts_relative_sibling_paths_and_reports_real_process_gaps (test_workstation_setup.WorkstationSetupTests.test_init_accepts_relative_sibling_paths_and_reports_real_process_gaps) ... ok
 test_sibling_layout_runs_without_packages_then_reuses_and_relocates (test_workstation_setup.WorkstationSetupTests.test_sibling_layout_runs_without_packages_then_reuses_and_relocates) ... ok
@@ -138,6 +142,6 @@ test_oracle_is_explicit_contract_not_a_live_database_pass (test_verification.Ver
 test_python_sqlite_executes_real_sqlite_and_matches_all_scenarios (test_verification.VerificationTests.test_python_sqlite_executes_real_sqlite_and_matches_all_scenarios) ... ok
 
 ----------------------------------------------------------------------
-Ran 138 tests in 31.829s
+Ran 142 tests in 33.114s
 
 OK (skipped=1)

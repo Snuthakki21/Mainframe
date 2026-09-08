@@ -160,8 +160,8 @@ def discover(repo: Path, rows: list[dict], config: dict) -> dict:
         selected = [r for r in rows if r['job'] == name]
         try:
             jcl = resolve(index,name,{'.jcl'})
-            report['sources'][str(jcl.relative_to(repo))] = digest(jcl.read_bytes())
-            job = parse_jcl(jcl.read_text(encoding='utf-8-sig'),str(jcl.relative_to(repo)))
+            report['sources'][jcl.relative_to(repo).as_posix()] = digest(jcl.read_bytes())
+            job = parse_jcl(jcl.read_text(encoding='utf-8-sig'),jcl.relative_to(repo).as_posix())
             if job['name'] != name: raise Blocked(f'Inventory job {name} differs from JCL JOB {job["name"]}.', 'INVENTORY_CONFLICT',jcl.name)
             # Every JCL step must be visible. Missing inventory rows do not hide work.
             expected = [(r['step'],r['program']) for r in selected if not documentation_only(r)]
@@ -217,8 +217,8 @@ def discover(repo: Path, rows: list[dict], config: dict) -> dict:
                                 'Resolve the documentation/source difference; DDL alone does not establish step behavior.',
                                 'INVENTORY_DATABASE_CONFLICT', location).issue(name))
             for path in files:
-                report['sources'][str(path.relative_to(repo))] = digest(path.read_bytes())
-            job['dependencies'] = sorted(str(p.relative_to(repo)) for p in files)
+                report['sources'][path.relative_to(repo).as_posix()] = digest(path.read_bytes())
+            job['dependencies'] = sorted(p.relative_to(repo).as_posix() for p in files)
             report['jobs'].append(job)
         except (Blocked, UnicodeError) as exc:
             e = exc if isinstance(exc,Blocked) else Blocked(str(exc),'SOURCE_ENCODING',name)

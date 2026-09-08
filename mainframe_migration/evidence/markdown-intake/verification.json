@@ -8,8 +8,8 @@
   },
   "tests": {
     "command": "python -S modernize.py self-test",
-    "run": 138,
-    "passed": 137,
+    "run": 142,
+    "passed": 141,
     "skipped": 1,
     "failures": 0,
     "errors": 0,
@@ -179,5 +179,11 @@
     "This receipt records Linux execution. Windows CI is configured separately; no Windows success is asserted here.",
     "No real mainframe baseline, live IDE agent, Oracle, or BigQuery was executed.",
     "Missing Java and .NET SDKs are NOT_AVAILABLE; generation is not native compilation."
+  ],
+  "windows_findings_addressed": [
+    "Resolve Windows short and long path aliases before asserting identity.",
+    "Preserve source path backslashes and quotes as data in generated Python docstrings.",
+    "Use POSIX separators for repository-relative discovery provenance.",
+    "Keep exact package bytes across Windows Git checkout line-ending settings."
   ]
 }

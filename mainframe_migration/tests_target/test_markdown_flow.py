@@ -101,7 +101,7 @@ class MarkdownFlowTests(unittest.TestCase):
         self.assertEqual(description_row['section'], 'Audit and ledger')
         self.assertEqual(description_row['fields_present'], ['step', 'program', 'description'])
         self.assertEqual(FLOW.splitlines()[description_row['row']-1].split('|')[2].strip(), 'LOADDB')
-        self.assertEqual(description_row['source'], str(self.document))
+        self.assertEqual(description_row['source'], str(self.document.resolve()))
         audit = next(d for d in flow['dataset_bindings'] if d['dataset'] == 'SAMPLE.AUDIT')
         self.assertEqual((audit['path'], audit['configured_role']), ('files/audit.bin', 'output'))
         self.assertEqual(audit['documented_outputs'][0]['job'], 'JOB004')
@@ -121,7 +121,7 @@ class MarkdownFlowTests(unittest.TestCase):
         self.assertFalse(any('NONE is referenced' in i['question'] for i in result['issues']))
         request = read_json(Path(result['run_folder'])/'agent_request.json')
         self.assertEqual(request['process_flow'], result['process_flow'])
-        self.assertIn(str(self.document), request['input_files'])
+        self.assertIn(str(self.document.resolve()), request['input_files'])
         self.assertTrue(any(i['code'] == 'MISSING_MEMBER' for i in request['discovery_issues']))
         self.assertNotIn('artifact_folder', result)
 
@@ -156,8 +156,8 @@ class MarkdownFlowTests(unittest.TestCase):
         result = self.runit(verify=False)
         request = read_json(Path(result['run_folder'])/'agent_request.json')
         knowledge = self.root/'sample/knowledge/new_answers.json'
-        self.assertIn(str(knowledge), request['input_files'])
-        self.assertIsNone(request['input_files'][str(knowledge)])
+        self.assertIn(str(knowledge.resolve()), request['input_files'])
+        self.assertIsNone(request['input_files'][str(knowledge.resolve())])
         check_request(request)
         write_json(knowledge, {'schema_version': 1, 'answers': []})
         with self.assertRaises(Blocked) as caught:
